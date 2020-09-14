@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Travolo</string>
+    <string name="nav_id">id</string>
+    <string name="nav_name">name</string>
+</resources>
