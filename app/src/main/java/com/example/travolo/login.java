@@ -166,7 +166,7 @@ public class login extends AppCompatActivity {
 
     public void checkarea(){
         list = new ArrayList<>();
-        String URL = "http://211.253.26.214:8080/travolo2/post/login";//통신할 서버 url
+        String URL = "";//통신할 서버 url
 
         Response.Listener<JSONArray> listener = new Response.Listener<JSONArray>() {
             @Override
