@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,12 +20,31 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class login extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
+    private List<searchitem> list;
+    AutoCompleteTextView textView;
+    private RequestQueue queue;
     Button button;
     long first;
     long second;
@@ -33,20 +55,24 @@ public class login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        Intent intent = getIntent();
+        final String id = globallist.getInstance().getId();
 
-        final String id = intent.getExtras().getString("id");
+        checkarea();
+
+        textView = findViewById(R.id.area);
+        textView.setAdapter(new searchAdapter(this,list));
+
 
         button = findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(login.this, period.class);
-                intent.putExtra("id",id);
                 startActivity(intent);
             }
         });
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
@@ -102,6 +128,7 @@ public class login extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent(login.this, MainActivity.class);
+                        globallist.getInstance().logout();
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(i);
                     }
@@ -135,5 +162,36 @@ public class login extends AppCompatActivity {
             finishAffinity();
         }
         first = System.currentTimeMillis();
+    }
+
+    public void checkarea(){
+        list = new ArrayList<>();
+        String URL = "http://211.253.26.214:8080/travolo2/post/login";//통신할 서버 url
+
+        Response.Listener<JSONArray> listener = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try{
+                    for(int i=0;i<response.length();i++){
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        String name = jsonObject.getString("name");
+                        String address = jsonObject.getString("address");
+                        list.add(new searchitem(name, address));
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        };
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        };
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST,URL,null, listener, errorListener);
+        queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 }

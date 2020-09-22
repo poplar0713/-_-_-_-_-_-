@@ -107,7 +107,7 @@ public class signup extends AppCompatActivity {
                     imageView.setImageResource(R.drawable.check);
                     passcheckflag = 1;
                 }else{
-                    imageView.setImageResource(R.drawable.x);
+                    imageView.setImageResource(R.drawable.images);
                     passcheckflag = 0;
                 }
             }

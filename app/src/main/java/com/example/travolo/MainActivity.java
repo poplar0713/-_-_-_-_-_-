@@ -74,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
                         if(preference.equals("1")) {
                             Toast.makeText(getApplicationContext(), "Log in Success!", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(MainActivity.this, login.class);//메인화면으로 이동
-                            intent.putExtra("id", user_id);
+                            globallist.getInstance().setId(user_id);
                             startActivity(intent);
                         }else{
                             Intent intent = new Intent(MainActivity.this, arealist.class);//메인화면으로 이동
-                            intent.putExtra("id", user_id);
+                            globallist.getInstance().setId(user_id);
                             startActivity(intent);
                         }
                     } else {

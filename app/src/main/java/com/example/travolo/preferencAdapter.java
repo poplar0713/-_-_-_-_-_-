@@ -23,7 +23,7 @@ public class preferencAdapter extends RecyclerView.Adapter<preferencAdapter.View
     Context context;
     private ArrayList<preference> items = new ArrayList<>();
     private SparseBooleanArray selected = new SparseBooleanArray(0);
-    private Map<String, String> itemselect = new HashMap<>();
+    private ArrayList<preference> itemselect = new ArrayList<>();
 
 
     public preferencAdapter(Context context, ArrayList<preference> item){
@@ -49,11 +49,11 @@ public class preferencAdapter extends RecyclerView.Adapter<preferencAdapter.View
         if(isItemSelected(position)){
             viewHolder.itemView.findViewById(R.id.card_linear).setBackgroundColor(R.color.colorAccent);
             viewHolder.name.setTextColor(Color.WHITE);
-            itemselect.put(item.getTid(), item.getTid());
+            itemselect.add(item);
         }else {
             viewHolder.itemView.findViewById(R.id.card_linear).setBackgroundColor(Color.WHITE);
             viewHolder.name.setTextColor(Color.BLACK);
-            itemselect.remove(viewHolder.name.getText().toString());
+            itemselect.remove(item);
         }
     }
 
@@ -62,11 +62,7 @@ public class preferencAdapter extends RecyclerView.Adapter<preferencAdapter.View
         return items.size();
     }
 
-    public void setItems(ArrayList<preference> items){
-        this.items = items;
-    }
-
-    public Map<String, String> getItemselect(){
+    public ArrayList<preference> getItemselect(){
         return itemselect;
     }
 

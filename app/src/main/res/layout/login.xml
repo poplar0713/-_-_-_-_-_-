@@ -29,10 +29,10 @@
             android:layout_marginStart="50dp"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="170dp"
-            android:text="여행지 검색" />
+            android:text="여행지역 입력" />
 
-        <EditText
-            android:id="@+id/editTextTextPersonName"
+        <AutoCompleteTextView
+            android:id="@+id/area"
             android:layout_width="321dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -41,8 +41,7 @@
             android:layout_marginStart="50dp"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="220dp"
-            android:ems="10"
-            android:inputType="textPersonName" />
+            android:completionThreshold="1"/>
 
         <Button
             android:id="@+id/button2"

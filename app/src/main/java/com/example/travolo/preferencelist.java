@@ -2,6 +2,7 @@ package com.example.travolo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 
@@ -10,9 +11,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -22,6 +33,7 @@ public class preferencelist extends AppCompatActivity {
     private preferencAdapter adapter;
     private RequestQueue queue;
     GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
+    private ArrayList<preference> item = new ArrayList<>();
     int dataflag = 0;
 
     @Override
@@ -29,8 +41,14 @@ public class preferencelist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preferencelist);
         Intent intent = getIntent();
-        ArrayList<preference> item = (ArrayList<preference>)intent.getSerializableExtra("item");
+        String area = intent.getExtras().getString("area");
+        setRecycle(area);
         recyclerView = findViewById(R.id.recycler_area);
+        adapter = new preferencAdapter(this, item);
+        layoutManager.setSmoothScrollbarEnabled(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
         final Button button = findViewById(R.id.bb);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,11 +56,6 @@ public class preferencelist extends AppCompatActivity {
                     sendData(adapter);
             }
         });
-        adapter = new preferencAdapter(this,item);
-        layoutManager.setSmoothScrollbarEnabled(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-
 
 
     }
@@ -124,10 +137,52 @@ public class preferencelist extends AppCompatActivity {
 //    }
 
     public void sendData(preferencAdapter adapter){
-        final Map<String, String> params = adapter.getItemselect();
+        if(globallist.getInstance().getList() == null) {
+            globallist.getInstance().setList(adapter.getItemselect());
+        }else{
+            globallist.getInstance().addList(adapter.getItemselect());
+        }
+        Intent intent1 = new Intent(preferencelist.this, arealist.class);
+        startActivity(intent1);
+        finish();
+    }
+    public void setRecycle(final String area){
+        String URL ="http://211.253.26.214:8080/travolo2/post/randomLabel";
+        Response.Listener<JSONArray> listener = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                item.clear();
+                adapter.notifyDataSetChanged();
+                try{
+                    for(int i=0;i<response.length();i++){
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        String name = jsonObject.getString("name");
+                        String img = jsonObject.getString("img");
+                        String tid = jsonObject.getString("tid");
+                        item.add(new preference(name,img,tid));
+                        adapter.notifyItemInserted(0);
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        };
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
 
+            }
+        };
 
+        Map<String, String> params = new HashMap<>();
+        params.put("area", area);
+        JSONObject jsonObject = new JSONObject(params);
 
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(jsonObject);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST,URL,jsonArray, listener, errorListener);
+        queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
     @Override
     protected void onStop() {

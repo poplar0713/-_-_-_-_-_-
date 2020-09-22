@@ -7,8 +7,8 @@ public class Samplearea {
 
     public ArrayList<area> getItems(){
         area area1 = new area("서울");
-        area area2 = new area("경기도");
-        area area3 = new area("강원도");
+        area area2 = new area("경기");
+        area area3 = new area("강원");
         area area4 = new area("충청북도");
         area area5 = new area("충청남도");
         area area6 = new area("대전");
@@ -20,8 +20,9 @@ public class Samplearea {
         area area12 = new area("전라남도");
         area area13 = new area("전라북도");
         area area14 = new area("광주");
-        area area15 = new area("제주도");
-        area area16 = new area("울산");
+        area area15 = new area("제주");
+        area area16 = new area("세종");
+        area area17 = new area("울산");
 
         items.add(area1);
         items.add(area2);
@@ -39,6 +40,7 @@ public class Samplearea {
         items.add(area14);
         items.add(area15);
         items.add(area16);
+        items.add(area17);
 
         return items;
     }

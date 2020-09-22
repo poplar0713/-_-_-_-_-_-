@@ -49,9 +49,7 @@ public class period extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.period);
 
-        Intent intent = getIntent();
-
-        final String id = intent.getExtras().getString("id");
+        final String id = globallist.getInstance().getId();
 
 
         textView = findViewById(R.id.editTextTextPersonName2);
@@ -132,6 +130,7 @@ public class period extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent(period.this, MainActivity.class);
+                        globallist.getInstance().logout();
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(i);
                     }
