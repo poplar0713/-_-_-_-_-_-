@@ -37,6 +37,7 @@
         <activity android:name=".setting"/>
         <activity android:name=".preferencelist"/>
         <activity android:name=".arealist"/>
+        <activity android:name=".sample"/>
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
 

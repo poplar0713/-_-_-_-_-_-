@@ -175,8 +175,7 @@ public class login extends AppCompatActivity {
                     for(int i=0;i<response.length();i++){
                         JSONObject jsonObject = response.getJSONObject(i);
                         String name = jsonObject.getString("name");
-                        String address = jsonObject.getString("address");
-                        list.add(new searchitem(name, address));
+                        list.add(new searchitem(name));
                     }
                 }catch (JSONException e){
                     e.printStackTrace();

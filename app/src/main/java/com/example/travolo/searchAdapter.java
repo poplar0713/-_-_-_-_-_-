@@ -28,12 +28,10 @@ public class searchAdapter extends ArrayAdapter<searchitem> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_search, parent,false);
         }
         TextView areaname = convertView.findViewById(R.id.areaname);
-        TextView areaaddress = convertView.findViewById(R.id.areaaddress);
 
         searchitem searchitem = getItem(position);
         if(searchitem != null){
             areaname.setText(searchitem.getAreaName());
-            areaaddress.setText(searchitem.getAreaaddress());
         }
         return convertView;
     }

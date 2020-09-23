@@ -2,7 +2,6 @@ package com.example.travolo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -105,6 +104,7 @@ public class arealist extends AppCompatActivity {
                         Intent intent = new Intent(arealist.this, login.class);
                         globallist.getInstance().deleteList();
                         startActivity(intent);
+                        finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "networkerror!", Toast.LENGTH_SHORT).show();
                         return;
@@ -118,7 +118,7 @@ public class arealist extends AppCompatActivity {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "login error!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "networkerror!", Toast.LENGTH_SHORT).show();
                 return;
             }
         };
