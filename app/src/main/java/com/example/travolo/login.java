@@ -62,13 +62,14 @@ public class login extends AppCompatActivity {
 
         textView = findViewById(R.id.area);
         textView.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, list));
-
+        final String areadata = textView.getText().toString();
 
         button = findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(login.this, period.class);
+                intent.putExtra("area",areadata);
                 startActivity(intent);
             }
         });

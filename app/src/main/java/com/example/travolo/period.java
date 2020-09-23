@@ -50,10 +50,13 @@ public class period extends AppCompatActivity {
         setContentView(R.layout.period);
 
         final String id = globallist.getInstance().getId();
+        Intent intent = getIntent();
+        String area = intent.getExtras().getString("area");
 
 
-        textView = findViewById(R.id.editTextTextPersonName2);
-        textView2 = findViewById(R.id.editTextTextPersonName3);
+
+        textView = findViewById(R.id.from);
+        textView2 = findViewById(R.id.to);
         this.InitializeListener();
         this.InitializeListener2();
 
@@ -75,7 +78,7 @@ public class period extends AppCompatActivity {
                 dialog2.show();
             }
         });
-        button = findViewById(R.id.button4);
+        button = findViewById(R.id.make);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
