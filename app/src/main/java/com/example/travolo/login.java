@@ -42,8 +42,8 @@ import java.util.Map;
 public class login extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
-    private List<searchitem> list;
-    AutoCompleteTextView textView;
+    private List<String> list;
+    private AutoCompleteTextView textView;
     private RequestQueue queue;
     Button button;
     long first;
@@ -56,11 +56,12 @@ public class login extends AppCompatActivity {
         setContentView(R.layout.login);
 
         final String id = globallist.getInstance().getId();
+        list = new ArrayList<>();
 
         checkarea();
 
         textView = findViewById(R.id.area);
-        textView.setAdapter(new searchAdapter(this,list));
+        textView.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, list));
 
 
         button = findViewById(R.id.button2);
@@ -165,8 +166,8 @@ public class login extends AppCompatActivity {
     }
 
     public void checkarea(){
-        list = new ArrayList<>();
-        String URL = "";//통신할 서버 url
+
+        String URL = "http://211.253.26.214:8080/travolo2/post/search";//통신할 서버 url
 
         Response.Listener<JSONArray> listener = new Response.Listener<JSONArray>() {
             @Override
@@ -175,7 +176,7 @@ public class login extends AppCompatActivity {
                     for(int i=0;i<response.length();i++){
                         JSONObject jsonObject = response.getJSONObject(i);
                         String name = jsonObject.getString("name");
-                        list.add(new searchitem(name));
+                        list.add(name);
                     }
                 }catch (JSONException e){
                     e.printStackTrace();
