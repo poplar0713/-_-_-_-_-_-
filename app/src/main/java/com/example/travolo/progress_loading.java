@@ -35,7 +35,7 @@ public class progress_loading extends AppCompatActivity {
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
-            Intent intent1 = new Intent(progress_loading.this,plan.class);
+            Intent intent1 = new Intent(progress_loading.this, planlist.class);
             intent1.putExtra("id",id);
             startActivity(intent1);
         }

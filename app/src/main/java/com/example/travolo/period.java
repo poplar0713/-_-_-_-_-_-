@@ -21,7 +21,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -51,7 +60,7 @@ public class period extends AppCompatActivity {
 
         final String id = globallist.getInstance().getId();
         Intent intent = getIntent();
-        String area = intent.getExtras().getString("area");
+        final String area = intent.getExtras().getString("area");
 
 
 
@@ -182,6 +191,55 @@ public class period extends AppCompatActivity {
                 textView2.setText(year + "년" + monthOfYear + "월" + dayOfMonth + "일");
             }
         };
+    }
+    public void send(final String area){
+        String URL = "http://211.253.26.214:8080/travolo2/post/preference";//통신할 서버 url
+        String from = textView.getText().toString();
+        String to = textView2.getText().toString();
+
+        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {//json오브젝트로 응답받음
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String success = response.getString("success");//응답이 success일 경우
+                    if (success != null && success.equals("1")) {
+                        Intent intent = new Intent(period.this, planlist.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "networkerror!", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "networkerror!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        };
+
+        //맵형태로 정보 전달
+        JSONObject jsonObject = new JSONObject();//맵형태의 정보를 json으로 전송
+
+        try{
+            jsonObject.put("area",area);
+            jsonObject.put("from",from);
+            jsonObject.put("to",to);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonObject, responseListener, errorListener);
+
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        queue.add(loginRequest);//전송
     }
 
 }

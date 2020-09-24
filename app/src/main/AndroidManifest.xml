@@ -29,8 +29,8 @@
         <activity android:name=".login"/>
         <activity android:name=".period"/>
         <activity android:name=".progress_loading"/>
-        <activity android:name=".plan" android:parentActivityName=".login"/>
-        <activity android:name=".planlist"/>
+        <activity android:name=".planlist" android:parentActivityName=".login"/>
+        <activity android:name=".planlistHistiory"/>
         <activity android:name=".signup"/>
         <activity android:name=".eventlist"/>
         <activity android:name=".historylist"/>
