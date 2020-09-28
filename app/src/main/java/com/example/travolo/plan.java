@@ -4,11 +4,13 @@ public class plan {
     private String name;
     private String image;
     private String grade;
+    private String tid;
 
-    public plan(String name, String image, String grade) {
+    public plan(String tid, String name, String image, String grade) {
         this.name = name;
         this.image = image;
         this.grade = grade;
+        this.tid = tid;
     }
 
     public String getName() {
@@ -29,6 +31,14 @@ public class plan {
 
     public String getGrade() {
         return grade;
+    }
+
+    public String getTid() {
+        return tid;
+    }
+
+    public void setTid(String tid) {
+        this.tid = tid;
     }
 
     public void setGrade(String grade) {

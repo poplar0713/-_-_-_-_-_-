@@ -21,6 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -91,8 +92,8 @@ public class period extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(period.this,progress_loading.class);
-                intent1.putExtra("id",id);
+                //send(area);
+                Intent intent1 = new Intent(period.this, planlist.class);
                 startActivity(intent1);
             }
         });
@@ -176,7 +177,7 @@ public class period extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
                 monthOfYear += 1;
-                textView.setText(year + "/" + monthOfYear + "/" + dayOfMonth);
+                textView.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
             }
         };
     }
@@ -188,13 +189,14 @@ public class period extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
                 monthOfYear += 1;
-                textView2.setText(year + "/" + monthOfYear + "/" + dayOfMonth);
+                textView2.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
             }
         };
     }
     public void send(final String area){
-        String URL = "http://211.253.26.214:8080/travolo2/post/preference";//통신할 서버 url
+        String URL = "http://211.253.26.214:443/executeAnalysis";//통신할 서버 url
         String from = textView.getText().toString();
+        String id = globallist.getInstance().getId();
         String to = textView2.getText().toString();
 
         Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {//json오브젝트로 응답받음
@@ -219,7 +221,7 @@ public class period extends AppCompatActivity {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "networkerror!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "서버오류", Toast.LENGTH_SHORT).show();
                 return;
             }
         };
@@ -228,6 +230,7 @@ public class period extends AppCompatActivity {
         JSONObject jsonObject = new JSONObject();//맵형태의 정보를 json으로 전송
 
         try{
+            jsonObject.put("user_id",id);
             jsonObject.put("area",area);
             jsonObject.put("from",from);
             jsonObject.put("to",to);
@@ -236,7 +239,7 @@ public class period extends AppCompatActivity {
         }
 
         JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonObject, responseListener, errorListener);
-
+        loginRequest.setRetryPolicy(new DefaultRetryPolicy(300000,DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
         queue.add(loginRequest);//전송

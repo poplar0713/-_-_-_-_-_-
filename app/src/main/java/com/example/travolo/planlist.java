@@ -50,10 +50,10 @@ public class planlist extends AppCompatActivity {
         setContentView(R.layout.planlist);
 
         final String id = globallist.getInstance().getId();
-        setRecycle_plan();
+        setRecycle_plan(id);
         recyclerView = findViewById(R.id.recycler_plan);
         adapter = new planAdapter(this, item);
-        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setSmoothScrollbarEnabled(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
@@ -109,6 +109,7 @@ public class planlist extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent(planlist.this, MainActivity.class);
+                        globallist.getInstance().logout();
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(i);
                     }
@@ -134,8 +135,8 @@ public class planlist extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    public void setRecycle_plan(){
-        String URL ="http://211.253.26.214:8080/travolo2/post/randomLabel";
+    public void setRecycle_plan(final String id){
+        String URL ="http://211.253.26.214:8080/travolo2/post/schedule";
         Response.Listener<JSONArray> listener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -147,7 +148,8 @@ public class planlist extends AppCompatActivity {
                         String name = jsonObject.getString("name");
                         String img = jsonObject.getString("img");
                         String grade = jsonObject.getString("grade");
-                        item.add(new plan(name,img,grade));
+                        String tid = jsonObject.getString("tid");
+                        item.add(new plan(tid,name,img,grade));
                         adapter.notifyItemInserted(0);
                     }
                 }catch (JSONException e){
@@ -161,8 +163,14 @@ public class planlist extends AppCompatActivity {
 
             }
         };
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", id);
+        JSONObject jsonObject = new JSONObject(params);
 
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST,URL,null, listener, errorListener);
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(jsonObject);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST,URL,jsonArray, listener, errorListener);
         queue = Volley.newRequestQueue(this);
         queue.add(request);
     }

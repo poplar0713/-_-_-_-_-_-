@@ -42,7 +42,7 @@ public class planAdapter extends RecyclerView.Adapter<planAdapter.Viewholder> {
 
     @Override
     public int getItemCount() {
-        return 0;
+        return items.size();
     }
 
     class Viewholder extends RecyclerView.ViewHolder{
