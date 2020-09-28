@@ -176,7 +176,7 @@ public class period extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
                 monthOfYear += 1;
-                textView.setText(year + "년" + monthOfYear + "월" + dayOfMonth + "일");
+                textView.setText(year + "/" + monthOfYear + "/" + dayOfMonth);
             }
         };
     }
@@ -188,7 +188,7 @@ public class period extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
                 monthOfYear += 1;
-                textView2.setText(year + "년" + monthOfYear + "월" + dayOfMonth + "일");
+                textView2.setText(year + "/" + monthOfYear + "/" + dayOfMonth);
             }
         };
     }

@@ -16,20 +16,53 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class planlist extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
+    RecyclerView recyclerView;
+    private planAdapter adapter;
+    private RequestQueue queue;
+    LinearLayoutManager linearLayoutManager;
+    private ArrayList<plan> item = new ArrayList<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.planlist);
 
-        Intent intent = getIntent();
+        final String id = globallist.getInstance().getId();
+        setRecycle_plan();
+        recyclerView = findViewById(R.id.recycler_plan);
+        adapter = new planAdapter(this, item);
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        linearLayoutManager.setSmoothScrollbarEnabled(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
 
-        final String id = intent.getExtras().getString("id");
+
+
+
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -100,5 +133,37 @@ public class planlist extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void setRecycle_plan(){
+        String URL ="http://211.253.26.214:8080/travolo2/post/randomLabel";
+        Response.Listener<JSONArray> listener = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                item.clear();
+                adapter.notifyDataSetChanged();
+                try{
+                    for(int i=0;i<response.length();i++){
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        String name = jsonObject.getString("name");
+                        String img = jsonObject.getString("img");
+                        String grade = jsonObject.getString("grade");
+                        item.add(new plan(name,img,grade));
+                        adapter.notifyItemInserted(0);
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        };
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        };
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST,URL,null, listener, errorListener);
+        queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 }

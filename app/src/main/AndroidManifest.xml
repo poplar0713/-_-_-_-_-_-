@@ -30,7 +30,7 @@
         <activity android:name=".period"/>
         <activity android:name=".progress_loading"/>
         <activity android:name=".planlist" android:parentActivityName=".login"/>
-        <activity android:name=".planlistHistiory"/>
+        <activity android:name=".planlist_histiory"/>
         <activity android:name=".signup"/>
         <activity android:name=".eventlist"/>
         <activity android:name=".historylist"/>

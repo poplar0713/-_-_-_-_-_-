@@ -5,11 +5,11 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class planlistHistiory extends AppCompatActivity {
+public class planlist_histiory extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.planlistHistory);
+        setContentView(R.layout.planlist_history);
     }
 }
