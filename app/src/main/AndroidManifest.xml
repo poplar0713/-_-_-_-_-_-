@@ -24,19 +24,24 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity">
-
         </activity>
-        <activity android:name=".login"/>
+        <activity android:name=".login" />
         <activity android:name=".period"/>
         <activity android:name=".progress_loading"/>
         <activity android:name=".planlist" android:parentActivityName=".login"/>
-        <activity android:name=".planlist_histiory"/>
-        <activity android:name=".signup"/>
+        <activity android:name=".signup" />
         <activity android:name=".eventlist"/>
         <activity android:name=".historylist"/>
+        <activity android:name=".checkpwd"/>
+        <activity android:name=".changepwd"/>
         <activity android:name=".setting"/>
         <activity android:name=".preferencelist"/>
+        <activity android:name=".preference_loading"/>
         <activity android:name=".arealist"/>
+        <activity android:name=".plan_map"/>
+        <activity android:name=".findaccount"/>
+        <activity android:name=".areainfo"/>
+        <activity android:name=".findresult"/>
         <activity android:name=".sample"/>
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>

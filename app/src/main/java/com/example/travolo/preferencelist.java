@@ -2,7 +2,6 @@ package com.example.travolo;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 
@@ -27,128 +26,51 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class preferencelist extends AppCompatActivity {
+public class preferencelist extends AppCompatActivity {//해당 지역의 여행지 표시 화면
 
     RecyclerView recyclerView;
     private preferencAdapter adapter;
     private RequestQueue queue;
-    GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
+    GridLayoutManager layoutManager = new GridLayoutManager(this, 4);//한줄에 4개씩 여행지를 띄움
     private ArrayList<preference> item = new ArrayList<>();
-    int dataflag = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.preferencelist);
         Intent intent = getIntent();
-        String area = intent.getExtras().getString("area");
-        setRecycle(area);
+        String area = intent.getExtras().getString("area");//선택한 지역의 이름을 전달받음
+        setRecycle(area);//해당지역의 여행지를 전달받음
         recyclerView = findViewById(R.id.recycler_area);
         adapter = new preferencAdapter(this, item);
         layoutManager.setSmoothScrollbarEnabled(true);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);//리사이클러뷰 표시
 
-        final Button button = findViewById(R.id.bb);
+        final Button button = findViewById(R.id.bb);//확인버튼
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    sendData(adapter);
+                    sendData(adapter);//전역변수에 선택한 여행지 저장
                     finish();
             }
         });
 
 
     }
-//    public void setRecyclerView(View view) {
-//
-//        String URL = "http://211.253.26.214:8080/travolo2/post/randomLabel";
-//
-//        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.POST, URL, null, new Response.Listener<JSONArray>() {
-//            @Override
-//            public void onResponse(JSONArray response) {
-//                item.clear();
-//                adapter.notifyDataSetChanged();
-//                try {
-//                    for(int i = 0; i<response.length();i++){
-//                        JSONObject jsonObject = response.getJSONObject(i);
-//                        String name = jsonObject.getString("name");
-//                        String img = jsonObject.getString("img");
-//                        String tid = jsonObject.getString("tid");
-//                        item.add(new preference(name,img,tid));
-//                        adapter.notifyItemInserted(0);
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        });
-//        queue = Volley.newRequestQueue(this);
-//        queue.add(jsonArrayRequest);
-//    }
-
-//    public void sendData(preferencAdapter adapter, final String id) {
-//        String URL = "http://211.253.26.214:8080/travolo2/post/preference";//통신할 서버 url
-//        final Map<String, String> params = adapter.getItemselect();
-//
-//        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {//json오브젝트로 응답받음
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    String success = response.getString("success");//응답이 success일 경우
-//                    if (success != null && success.equals("1")) {
-//                        Intent intent = new Intent(preferencelist.this, login.class);
-//                        intent.putExtra("id", id);
-//                        startActivity(intent);
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "networkerror!", Toast.LENGTH_SHORT).show();//아이디 비밀번호가 다른경우
-//                        return;
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//
-//        Response.ErrorListener errorListener = new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(getApplicationContext(), "login error!", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//        };
-//
-//        //맵형태로 정보 전달
-//        params.put("user_id", id);
-//        JSONObject jsonObject = new JSONObject(params);//맵형태의 정보를 json으로 전송
-//
-//        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonObject, responseListener, errorListener);
-//
-//
-//        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-//        if (params.size() > 19)
-//            queue.add(loginRequest);//전송
-//        else
-//            Toast.makeText(getApplicationContext(),"최소 20개를 선택해 주세요",Toast.LENGTH_SHORT).show();
-//    }
 
     public void sendData(preferencAdapter adapter){
-        if(globallist.getInstance().getList() == null) {
+        if(globallist.getInstance().getList() == null) {//선택한 여행지 리스트가 없을경우 새로생성
             globallist.getInstance().setList(adapter.getItemselect());
-        }else{
+        }else{//이미 존재한다면 추가
             globallist.getInstance().addList(adapter.getItemselect());
         }
-        Intent intent1 = new Intent(preferencelist.this, arealist.class);
+        Intent intent1 = new Intent(preferencelist.this, arealist.class);//다시 지역선택 화면으로 이동
         startActivity(intent1);
         finish();
     }
     public void setRecycle(final String area){
-        String URL ="http://211.253.26.214:8080/travolo2/post/randomLabel";
+        String URL ="http://211.253.26.214:8080/travolo2/post/randomLabel";//통신할 URL
         Response.Listener<JSONArray> listener = new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -157,7 +79,7 @@ public class preferencelist extends AppCompatActivity {
                 try{
                     for(int i=0;i<response.length();i++){
                         JSONObject jsonObject = response.getJSONObject(i);
-                        String name = jsonObject.getString("name");
+                        String name = jsonObject.getString("name");//여행지의 이름, 사진, tid를 전달받음
                         String img = jsonObject.getString("img");
                         String tid = jsonObject.getString("tid");
                         item.add(new preference(name,img,tid));
@@ -176,7 +98,7 @@ public class preferencelist extends AppCompatActivity {
         };
 
         Map<String, String> params = new HashMap<>();
-        params.put("area", area);
+        params.put("area", area);//지역이름을 전달
         JSONObject jsonObject = new JSONObject(params);
 
         JSONArray jsonArray = new JSONArray();

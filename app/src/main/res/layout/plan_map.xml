@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context="com.skt.tmapsample.tmapview.MapDraw">
 
 
         <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
@@ -40,40 +41,35 @@
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:background="@color/colorAccent"
+                android:background="@color/cardview_shadow_start_color"
                 android:text="일정"
-                android:textColor="#ffffff" />
+                android:textColor="@color/design_default_color_on_secondary" />
 
             <Button
-                android:id="@+id/mapbtn"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:background="@color/cardview_shadow_start_color"
-                android:text="경로" />
+                android:background="@color/colorAccent"
+                android:text="경로"
+                android:textColor="#ffffff" />
 
         </LinearLayout>
-
         <LinearLayout
+            android:id="@+id/Tmapview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical">
             <ScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-            <LinearLayout
-                android:id="@+id/btnline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"/>
+                <LinearLayout
+                    android:id="@+id/datebtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"/>
             </ScrollView>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_plan"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
 
         </LinearLayout>
-
 
     </LinearLayout>
     <com.google.android.material.navigation.NavigationView

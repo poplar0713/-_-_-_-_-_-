@@ -14,9 +14,10 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class planAdapter extends RecyclerView.Adapter<planAdapter.Viewholder> {
+public class planAdapter extends RecyclerView.Adapter<planAdapter.ViewHolder> implements onPlanItemClickListener {
     private ArrayList<plan> items = new ArrayList<>();
     Context context;
+    onPlanItemClickListener listener;
 
     public planAdapter(Context context, ArrayList<plan> items) {
         this.context = context;
@@ -25,19 +26,38 @@ public class planAdapter extends RecyclerView.Adapter<planAdapter.Viewholder> {
 
     @NonNull
     @Override
-    public planAdapter.Viewholder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public planAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {//어뎁터 생성
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_plan,parent,false);
-        planAdapter.Viewholder viewholder = new planAdapter.Viewholder(itemView);
+        planAdapter.ViewHolder viewholder = new planAdapter.ViewHolder(itemView);
         return viewholder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull planAdapter.Viewholder holder, int position) {
-        plan item = items.get(position);
-        holder.name.setText(item.getName());
-        holder.grade.setText(item.getGrade());
-        Glide.with(context).load(item.getImage()).into(holder.image);
+    public void onBindViewHolder(@NonNull planAdapter.ViewHolder holder, int position) {//각 아이템별 설정
+        int day = 0;
 
+        plan item = items.get(position);
+        holder.name.setText("이름 : "+item.getName());//이름 표시
+        holder.info.setText("설명 : "+item.getInfo());//설명 표시
+        Glide.with(context).load(item.getImage()).into(holder.image);//여행지 사진 등록
+        int itemposition = holder.getAdapterPosition();
+        if(itemposition % 4 == 0) {//일정이 하루에 4개로 설정 되어 있기에 4로 나누어 떨어지면 몇일차인지 표시
+            day = itemposition / 4;
+            holder.date.setVisibility(View.VISIBLE);//레이아웃을 보이게 설정
+            holder.date.setText(day + 1 + "일차 일정");
+        }else{
+                holder.date.setVisibility(View.GONE);//나누어떨어지지 않으면 숨김
+        }
+    }
+    public void setOnItemClicklistener(onPlanItemClickListener listener){//아이템을 선택한경우
+        this.listener = listener;
+    }
+
+    @Override
+    public void onItemClick(ViewHolder viewHolder, View view, int position) {
+        if(listener != null){
+            listener.onItemClick(viewHolder,view,position);
+        }
     }
 
     @Override
@@ -45,15 +65,36 @@ public class planAdapter extends RecyclerView.Adapter<planAdapter.Viewholder> {
         return items.size();
     }
 
-    class Viewholder extends RecyclerView.ViewHolder{
-        TextView name,grade;
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
+
+    public plan getItems(int position) {
+        return items.get(position);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder{
+        TextView name,info,date;
         ImageView image;
 
-        Viewholder(View itemView){
+        ViewHolder(View itemView){
             super(itemView);
+            date = itemView.findViewById(R.id.date);
             name = itemView.findViewById(R.id.name);
-            grade = itemView.findViewById(R.id.grade);
+            info = itemView.findViewById(R.id.info);
             image = itemView.findViewById(R.id.image);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if(listener != null){
+                        listener.onItemClick(ViewHolder.this,v,position);
+                    }
+                }
+            });
+
         }
     }
 }

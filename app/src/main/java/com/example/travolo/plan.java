@@ -3,13 +3,13 @@ package com.example.travolo;
 public class plan {
     private String name;
     private String image;
-    private String grade;
+    private String info;
     private String tid;
 
-    public plan(String tid, String name, String image, String grade) {
+    public plan(String tid, String name, String image, String info) {
         this.name = name;
         this.image = image;
-        this.grade = grade;
+        this.info = info;
         this.tid = tid;
     }
 
@@ -29,9 +29,6 @@ public class plan {
         this.image = image;
     }
 
-    public String getGrade() {
-        return grade;
-    }
 
     public String getTid() {
         return tid;
@@ -41,7 +38,11 @@ public class plan {
         this.tid = tid;
     }
 
-    public void setGrade(String grade) {
-        this.grade = grade;
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

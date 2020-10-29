@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class globallist {
-    private ArrayList<preference> list;
-    private String id;
-
+    private ArrayList<preference> list;//선택한 여행지를 저장하기 위한 리스트
+    private String id;//로그인을 위한 아이디 저장
+    private int date;
     public ArrayList<preference> getList() {
         return list;
     }
@@ -17,6 +17,14 @@ public class globallist {
 
     public String getId(){
         return id;
+    }
+
+    public int getDate() {
+        return date;
+    }
+
+    public void setDate(int date) {
+        this.date = date;
     }
 
     public void setList(ArrayList<preference> list) {
@@ -33,19 +41,19 @@ public class globallist {
     }
     public String getItem(int i){
         return this.list.get(i).getTid();
-    }
+    }//아이템의 tid 반환
     public void removeList(int position){
         this.list.remove(position);
-    }
-    public void logout(){this.id = null;}
+    }//전역변수의 리스트에 존재하는 아이템하나설정
+    public void logout(){this.id = null;}//아이디를 초기화
     public void deleteList() {
         this.list.clear();
-    }
+    }//전역변수의 리스트를 초기화
     private static globallist globallist = null;
     public static synchronized globallist getInstance(){
         if(globallist==null){
-            globallist = new globallist();
+            globallist = new globallist();//전역변수가 없을경우 전역변수 생성
         }
-        return globallist;
+        return globallist;//존재하면 전역변수 반환
     }
 }

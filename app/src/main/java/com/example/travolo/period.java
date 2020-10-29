@@ -21,18 +21,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,12 +34,13 @@ public class period extends AppCompatActivity {
     private Context context = this;
     TextView textView,textView2;
     Button button;
+    SimpleDateFormat format;
     private DatePickerDialog.OnDateSetListener callbackMethod;
     private DatePickerDialog.OnDateSetListener callbackMethod2;
     Date currentTime = Calendar.getInstance().getTime();
-    SimpleDateFormat yearf = new SimpleDateFormat("yyyy", Locale.getDefault());
-    SimpleDateFormat monthf = new SimpleDateFormat("MM",Locale.getDefault());
-    SimpleDateFormat datef = new SimpleDateFormat("dd",Locale.getDefault());
+    SimpleDateFormat yearf = new SimpleDateFormat("yyyy", Locale.getDefault());//년도
+    SimpleDateFormat monthf = new SimpleDateFormat("MM",Locale.getDefault());//월
+    SimpleDateFormat datef = new SimpleDateFormat("dd",Locale.getDefault());//일
 
     int year = Integer.parseInt(yearf.format(currentTime));
     int month = Integer.parseInt(monthf.format(currentTime));
@@ -59,9 +51,9 @@ public class period extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.period);
 
-        final String id = globallist.getInstance().getId();
+        final String id = globallist.getInstance().getId();//사용자의 id를 받음
         Intent intent = getIntent();
-        final String area = intent.getExtras().getString("area");
+        final String area = intent.getExtras().getString("area");//사용자가 선택한 여행지를 받음
 
 
 
@@ -70,39 +62,53 @@ public class period extends AppCompatActivity {
         this.InitializeListener();
         this.InitializeListener2();
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                DatePickerDialog dialog = new DatePickerDialog(context, callbackMethod, year, month-1, day);
-
+            public void onClick(View v) {//기간설정을 위한 달력을 띄움
+                DatePickerDialog dialog = new DatePickerDialog(context, callbackMethod, year, month-1, day);//달력의 시작일자를 현재 날짜로 시작하게 설정
                 dialog.show();
             }
         });
 
         textView2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//기간설정을 위한 달력을 띄움
                 DatePickerDialog dialog2 = new DatePickerDialog(context, callbackMethod2, year, month-1, day);
-
                 dialog2.show();
             }
         });
         button = findViewById(R.id.make);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //send(area);
-                Intent intent1 = new Intent(period.this, planlist.class);
-                startActivity(intent1);
+            public void onClick(View v) {//선택한 기간과 선택지를 서버로 전달하기위해 로딩페이지로 전달
+                Intent intent = new Intent(period.this, progress_loading.class);
+                final String from = textView.getText().toString();
+                final String to = textView2.getText().toString();
+                try{
+                    format = new SimpleDateFormat("yyyy-MM-dd");
+                    Date first = format.parse(from);
+                    Date second = format.parse(to);
+
+                    long caldate = first.getTime() - second.getTime();
+                    long caldateday = caldate/(24*60*60*1000);
+
+                    caldateday = Math.abs(caldateday);//선택한 날짜 사이의 기간을 계산
+                    globallist.getInstance().setDate((int)caldateday+1);//전역변수에 날짜 저장
+                }catch (ParseException e){
+
+                }
+                intent.putExtra("area",area);//여행지
+                intent.putExtra("from",from);//시작일
+                intent.putExtra("to",to);//종료일
+                startActivity(intent);
             }
         });
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
-        actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
-        actionBar.setHomeAsUpIndicator(R.drawable.hamburgermenu_120234); //뒤로가기 버튼 이미지 지정
+        actionBar.setDisplayHomeAsUpEnabled(true); // 햄버거 버튼 만들기
+        actionBar.setHomeAsUpIndicator(R.drawable.hamburgermenu_120234); //햄버거 버튼 이미지 지정
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -138,12 +144,12 @@ public class period extends AppCompatActivity {
         Button button = nav_haeder.findViewById(R.id.button3);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//로그아웃 버튼 선택시 동작
                 new AlertDialog.Builder(context).setTitle("로그아웃").setMessage("로그아웃 하시겠습니까?").setPositiveButton("로그아웃", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent(period.this, MainActivity.class);
-                        globallist.getInstance().logout();
+                        globallist.getInstance().logout();//저장된 아이디 제거
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(i);
                     }
@@ -162,7 +168,7 @@ public class period extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:{ // 왼쪽 상단 버튼 눌렀을 때
-                mDrawerLayout.openDrawer(GravityCompat.START);
+                mDrawerLayout.openDrawer(GravityCompat.START);//햄버거 버튼 화면에 띄우기
                 return true;
             }
         }
@@ -177,7 +183,7 @@ public class period extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
                 monthOfYear += 1;
-                textView.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
+                textView.setText(year + "-" + monthOfYear + "-" + dayOfMonth);//선택한 날짜를 텍스트(yyyy-mm-dd)로 띄움
             }
         };
     }
@@ -189,60 +195,9 @@ public class period extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
             {
                 monthOfYear += 1;
-                textView2.setText(year + "-" + monthOfYear + "-" + dayOfMonth);
+                textView2.setText(year + "-" + monthOfYear + "-" + dayOfMonth);//선택한 날짜를 텍스트(yyyy-mm-dd)로 띄움
             }
         };
-    }
-    public void send(final String area){
-        String URL = "http://211.253.26.214:443/executeAnalysis";//통신할 서버 url
-        String from = textView.getText().toString();
-        String id = globallist.getInstance().getId();
-        String to = textView2.getText().toString();
-
-        Response.Listener<JSONObject> responseListener = new Response.Listener<JSONObject>() {//json오브젝트로 응답받음
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String success = response.getString("success");//응답이 success일 경우
-                    if (success != null && success.equals("1")) {
-                        Intent intent = new Intent(period.this, planlist.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "networkerror!", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "서버오류", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        };
-
-        //맵형태로 정보 전달
-        JSONObject jsonObject = new JSONObject();//맵형태의 정보를 json으로 전송
-
-        try{
-            jsonObject.put("user_id",id);
-            jsonObject.put("area",area);
-            jsonObject.put("from",from);
-            jsonObject.put("to",to);
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonObject, responseListener, errorListener);
-        loginRequest.setRetryPolicy(new DefaultRetryPolicy(300000,DefaultRetryPolicy.DEFAULT_MAX_RETRIES,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-
-        queue.add(loginRequest);//전송
     }
 
 }

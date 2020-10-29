@@ -17,92 +17,93 @@
         android:layout_height="wrap_content"
         android:fontFamily="cursive"
         android:gravity="center"
-        android:text="travelo"
-        android:textColor="@android:color/holo_blue_dark"
+        android:text="travolo"
+        android:textColor="#3cbffc"
         android:textSize="60sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="84dp"
-        android:hint="Email"
-        android:privateImeOptions="defaultInputmode=english"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="84dp"
+            android:hint="Email"
+            android:privateImeOptions="defaultInputmode=english"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="72dp"
-        android:hint="Password"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="72dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email" />
 
-    <CheckBox
-        android:id="@+id/autoLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="자동 로그인"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/btn"
-        android:text="Login"
-        android:textColor="#ffffff"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoLogin" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="10"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button">
-
-        <Button
-            android:layout_width="93dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:background="@drawable/btn2"
-            android:gravity="center"
-            android:text="Find Password"
-            android:textSize="15sp" />
-
-        <Button
-            android:id="@+id/signup"
+        <CheckBox
+            android:id="@+id/autoLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:background="@drawable/btn2"
-            android:gravity="center"
-            android:text="Sign Up"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textSize="15sp" />
+            android:layout_gravity="right"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:text="자동 로그인"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/btn"
+            android:text="Login"
+            android:textColor="#ffffff"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/autoLogin" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button">
+
+            <Button
+                android:id="@+id/findbtn"
+                android:layout_width="93dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="@drawable/btn2"
+                android:gravity="center"
+                android:text="Find Account"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:background="@drawable/btn2"
+                android:gravity="center"
+                android:text="Sign Up"
+                android:textColor="#3cbffc"
+                android:textSize="15sp" />
+
+        </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
