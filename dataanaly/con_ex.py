@@ -6,7 +6,7 @@ with ssh.Tunnel() as tunnel:
     # read sql data, make dataframe
     with connect.Connect(port=tunnel.local_bind_port) as conn:
 
-        sql = "select * from analysis_tour"
+        sql = "select label, category from crawling_tour where tid = 952"
         #sql = "update point set base_address = '충청남도 계룡시' where pid = 143"
         #sql = "update crawling_tour set grade = 5 where vote_count > 0 and grade <= 0"
         #sql = "select * from crawling_tour"

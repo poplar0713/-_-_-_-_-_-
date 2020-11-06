@@ -103,9 +103,7 @@ def getTourList(base_address, user_id, start_date, end_date):
     tmp_df = tmp_df.drop_duplicates(['gps_lat', 'gps_long'])
 
     i = 0
-    tmplist = [0,1]
-    tmplist.clear()
-
+    tmplist = list()
     while i < days*numOfoneday:
         tmplist.append(tmp_df.iloc[i]['TID'])
         i += 1

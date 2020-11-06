@@ -26,28 +26,3 @@ with ssh.Tunnel() as tunnel:
         item_sim_df = pd.DataFrame(data=item_sim, index=ratings_matrix.columns, columns=ratings_matrix.columns)
         print("==Similarity sort ok==")
         item_sim_df.to_csv('item_sim.csv', mode='w', encoding='utf-8-sig')
-
-
-        '''
-        def predict_rating_topsim(ratings_arr, item_sim_arr, n=20):
-            pred = np.zeros(ratings_arr.shape)
-
-            for col in range(ratings_arr.shape[1]):
-                top_n_items = [np.argsort(item_sim_arr[:,col])[:-n-1:1]]
-
-                for row in range(ratings_arr.shape[0]):
-                    pred[row,col] = item_sim_arr[col,:][top_n_items].dot(ratings_arr[row,:][top_n_items].T)
-                    pred[row,col] /= np.sum(np.abs(item_sim_arr[col,:][top_n_items]))
-
-            return pred
-
-        rating_pred = predict_rating_topsim(ratings_matrix.values, item_sim_df.values, n=100)
-        rating_pred_matrix = pd.DataFrame(data=rating_pred, index=ratings_matrix.index, columns=ratings_matrix.columns)
-
-        ratings_matrix.to_csv('rating_pred.csv', mode='w' ,encoding='utf-8-sig')
-
-        #ratings_matrix.set_index('UID', inplace=True)
-
-        use_rating_id = ratings_matrix[27, :]
-        use_rating_id[use_rating_id > 0].sort_values(ascending=False)[:10]
-        '''

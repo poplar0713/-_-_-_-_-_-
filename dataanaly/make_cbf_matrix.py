@@ -17,7 +17,7 @@ with ssh.Tunnel() as tunnel:
         sql = "select * from crawling_tour"
         places_df = pd.read_sql_query(sql, conn)
 
-        print("==데이터 로드성공==")
+        print("====== 데이터 로드 성공 ======")
 
         places_df['type'] = places_df['type'].str.replace(':','')
         places_df['category'] = places_df['category'].str.replace('.',' ')
@@ -37,6 +37,7 @@ with ssh.Tunnel() as tunnel:
         #한국어 형태소 분석모듈 
         okt = Okt()
 
+        print('====== 명사화 및 데이터 전 처리 중 ======')
         #여행지명과 여행지 설명 데이터를 명사로 나누고 리스트로 저장시킨다.
         places_df['lab'] = places_df['lab'].apply(lambda x : okt.nouns(x))
         places_df['des'] = places_df['des'].apply(lambda x : okt.nouns(x))
@@ -49,6 +50,7 @@ with ssh.Tunnel() as tunnel:
 
         count_vect = CountVectorizer(min_df=0,ngram_range=(1,2))
 
+        print('====== 코사인 벡터화 작업 중 ======')
         #각 속성을 유사도 벡터화 시킴
         cat_mat1 = count_vect.fit_transform(places_df['des'])
         cat_mat2 = count_vect.fit_transform(places_df['lab'])
@@ -59,18 +61,18 @@ with ssh.Tunnel() as tunnel:
         cat_sim1 *= 0.9
         cat_sim2 *= 0.1
 
-        print("==행렬화 완료!==")
+        print("====== 행렬화 완료 =======")
 
         cat_sim = cat_sim1 + cat_sim2
         #유사도가 큰 순으로 정렬
         cat_sim = cat_sim.argsort()[:, ::-1]
-        cat_sim = cat_sim[:,0:500]
+        cat_sim = cat_sim[:, 0:500]
 
         print(cat_sim.shape)
         print(cat_sim)
 
         np.save('./CBF_Matrix', cat_sim)
 
-        print("==저장 완료! CBF_Matrix.npy 가 생성되었습니다.==")
+        print("======저장 완료. CBF_Matrix.npy 가 생성되었습니다.======")
 
         print(time.time() - start)
