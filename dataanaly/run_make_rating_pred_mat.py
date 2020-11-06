@@ -1,0 +1,3 @@
+import make_rating_matrix
+
+make_rating_matrix.make_matrix()
