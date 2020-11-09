@@ -48,6 +48,8 @@ public class progress_loading extends AppCompatActivity {
                 try {
                     String success = response.getString("success");//응답이 success일 경우
                     if (success != null && success.equals("1")) {
+                        String group_no = response.getString("group_no");
+                        globallist.getInstance().setGroup_no(group_no);
                         Intent intent = new Intent(progress_loading.this, planlist.class);//일정 표시화면으로 이동
                         startActivity(intent);
                         finish();

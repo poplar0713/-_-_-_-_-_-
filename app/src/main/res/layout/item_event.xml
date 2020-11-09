@@ -17,8 +17,7 @@
             android:id="@+id/event_image"
             android:layout_width="match_parent"
             android:layout_height="240dp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/flower" />
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -33,15 +32,6 @@
             android:paddingBottom="8dp">
 
             <TextView
-                android:id="@+id/event_contry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Movie Genre"
-                android:textColor="@android:color/white"
-                android:textSize="12dp" />
-
-            <TextView
                 android:id="@+id/event_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,7 +42,7 @@
 
 
             <TextView
-                android:id="@+id/event_content"
+                android:id="@+id/event_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Movie Content"

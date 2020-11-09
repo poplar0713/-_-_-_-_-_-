@@ -75,7 +75,7 @@ public class setting extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
         actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
-        actionBar.setHomeAsUpIndicator(R.drawable.hamburgermenu_120234); //뒤로가기 버튼 이미지 지정
+        actionBar.setHomeAsUpIndicator(R.drawable.hambergermenu); //뒤로가기 버튼 이미지 지정
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);

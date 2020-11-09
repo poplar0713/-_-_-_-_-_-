@@ -42,6 +42,7 @@
         <activity android:name=".findaccount"/>
         <activity android:name=".areainfo"/>
         <activity android:name=".findresult"/>
+        <activity android:name=".evaluateplan"/>
         <activity android:name=".sample"/>
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>

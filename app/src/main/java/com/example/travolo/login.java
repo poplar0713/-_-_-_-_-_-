@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,7 +37,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class login extends AppCompatActivity {
@@ -48,6 +52,9 @@ public class login extends AppCompatActivity {
     long first;
     long second;
     private Toast toast;
+    private eventAdapter adapter;
+    LinearLayoutManager linearLayoutManager;
+    private ArrayList<event> item = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +87,23 @@ public class login extends AppCompatActivity {
             }
         });
 
+        setRecycler();
+
+        adapter = new eventAdapter(item,this);
+        RecyclerView recyclerView = findViewById(R.id.recycler_best);
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);//세로로 리스트를 띄움
+        linearLayoutManager.setSmoothScrollbarEnabled(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
         actionBar.setDisplayHomeAsUpEnabled(true); // 햄버거 버튼 만들기
-        actionBar.setHomeAsUpIndicator(R.drawable.hamburgermenu_120234); //햄버거 버튼 이미지 지정
+        actionBar.setHomeAsUpIndicator(R.drawable.hambergermenu); //햄버거 버튼 이미지 지정
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -104,7 +122,6 @@ public class login extends AppCompatActivity {
 
                 else if(id == R.id.plan){//생성된 여행일정 페이지
                     Intent intent2 = new Intent(login.this, historylist.class);
-                    intent2.putExtra("id",id);
                     startActivity(intent2);
                 }
                 else if(id == R.id.event){
@@ -193,7 +210,6 @@ public class login extends AppCompatActivity {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
             }
         };
 
@@ -207,5 +223,43 @@ public class login extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         return true;
+    }
+    public void setRecycler(){
+        String uid= globallist.getInstance().getId();
+        String URL ="http://211.253.26.214:15000/recommandTourList";//통신할 URL
+        Response.Listener<JSONArray> listener = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                item.clear();
+                adapter.notifyDataSetChanged();
+                try{
+                    for(int i=0;i<response.length();i++){
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        String name = jsonObject.getString("label");//여행지의 이름, 사진, tid를 전달받음
+                        String img = jsonObject.getString("img");
+                        String ad = jsonObject.getString("address");
+                        item.add(new event(name,ad,img));
+                        adapter.notifyItemInserted(0);
+                    }
+                }catch (JSONException e){
+                    Toast.makeText(login.this," list error", Toast.LENGTH_LONG).show();
+                }
+            }
+        };
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(login.this,"newt error", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id",uid);
+
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(params);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST,URL,jsonArray, listener, errorListener);
+        queue = Volley.newRequestQueue(this);
+        queue.add(request);
     }
 }

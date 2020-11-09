@@ -25,29 +25,19 @@ import com.google.android.material.navigation.NavigationView;
 public class eventlist extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
-
-    private eventAdapter adapter = new eventAdapter();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.eventlist);
 
-        Intent intent = getIntent();
-
-        final String id = intent.getExtras().getString("id");
-
-        RecyclerView recyclerView = findViewById(R.id.recycler_event);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
-        adapter.setItems(new SampleData().getItems());
+        String id = globallist.getInstance().getId();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
         actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
-        actionBar.setHomeAsUpIndicator(R.drawable.hamburgermenu_120234); //뒤로가기 버튼 이미지 지정
+        actionBar.setHomeAsUpIndicator(R.drawable.hambergermenu); //뒤로가기 버튼 이미지 지정
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);

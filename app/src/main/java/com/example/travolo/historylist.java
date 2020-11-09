@@ -20,35 +20,52 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class historylist extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
-    private historyAdapter adapter = new historyAdapter();
+    private RequestQueue queue;
+    LinearLayoutManager linearLayoutManager;
+    private historyAdapter adapter;
+    private ArrayList<history> item = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hitorylist);
 
-        Intent intent = getIntent();
+        final String id = globallist.getInstance().getId();
+        setRecycle_history(id);
 
-        final String id = intent.getExtras().getString("id");
-
+        adapter = new historyAdapter(item);
         RecyclerView recyclerView = findViewById(R.id.recycler_history);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);//세로로 리스트를 띄움
+        linearLayoutManager.setSmoothScrollbarEnabled(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
-        adapter.setItems(new historysample().getItems());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false); // 기존 title 지우기
         actionBar.setDisplayHomeAsUpEnabled(true); // 뒤로가기 버튼 만들기
-        actionBar.setHomeAsUpIndicator(R.drawable.hamburgermenu_120234); //뒤로가기 버튼 이미지 지정
+        actionBar.setHomeAsUpIndicator(R.drawable.hambergermenu); //뒤로가기 버튼 이미지 지정
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -100,6 +117,54 @@ public class historylist extends AppCompatActivity {
                 }).show();
             }
         });
+    }
+    public void setRecycle_history(final String id){
+        String URL ="http://211.253.26.214:8080/travolo2/post/scheduleList";//통신할 URL
+
+        Response.Listener<JSONArray> listener = new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                item.clear();
+                adapter.notifyDataSetChanged();
+                try{
+                    for(int i=0;i<response.length();i++) {
+                        JSONObject jsonObject = response.getJSONObject(i);
+                        String name = jsonObject.getString("schedule_name");//여행지 이름
+                        String num = jsonObject.getString("date");//여행일정 기간
+                        String historynum = jsonObject.getString("group_no");//여행일정 번호s
+                        int count = jsonObject.getInt("count");
+                        item.add(new history(name, num, historynum, count));
+                        adapter.notifyItemInserted(0);
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        };
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        };
+        Map<String, String> params = new HashMap<>();
+        params.put("user_id", id);
+        JSONObject jsonObject = new JSONObject(params);
+
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(jsonObject);
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST,URL,jsonArray, listener, errorListener);
+        queue = Volley.newRequestQueue(this);
+        queue.add(request);
+    }
+
+    @Override
+    public void onBackPressed() {//뒤로가기 버튼을 누를시
+        super.onBackPressed();
+        Intent i = new Intent(historylist.this, login.class);//메인화면으로 이동
+        startActivity(i);
+        finish();
     }
 
     @Override

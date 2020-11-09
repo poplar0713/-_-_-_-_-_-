@@ -1,18 +1,30 @@
 package com.example.travolo;
 
 public class event {
-    private String contry;
+    private String img;
     private String name;
-    private String content;
+    private String address;
 
-    public event(String contry, String name, String content) {
-        this.contry = contry;
+    public event(String name, String address, String img) {
         this.name = name;
-        this.content = content;
+        this.address = address;
+        this.img = img;
     }
 
-    public String getContry() {
-        return contry;
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setContent(String content) {
+        this.address = content;
     }
 
     public String getName() {
@@ -20,7 +32,7 @@ public class event {
     }
 
     public String getContent() {
-        return content;
+        return address;
     }
 
 }

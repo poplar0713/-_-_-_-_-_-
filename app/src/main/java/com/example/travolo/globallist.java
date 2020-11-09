@@ -5,8 +5,19 @@ import java.util.Map;
 
 public class globallist {
     private ArrayList<preference> list;//선택한 여행지를 저장하기 위한 리스트
+    private ArrayList<route> map;
     private String id;//로그인을 위한 아이디 저장
     private int date;
+    private String group_no;
+
+    public String getGroup_no() {
+        return group_no;
+    }
+
+    public void setGroup_no(String group_no) {
+        this.group_no = group_no;
+    }
+
     public ArrayList<preference> getList() {
         return list;
     }
@@ -30,6 +41,7 @@ public class globallist {
     public void setList(ArrayList<preference> list) {
         this.list = list;
     }
+
 
     public void addList(ArrayList<preference> list){
         for(int i =0; i< list.size(); i++){

@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="num." />
+                android:text="기간" />
 
             <TextView
                 android:id="@+id/textView7"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="name." />
+                android:text="여행지" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="confirm." />
+                android:text="일정 확인" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

@@ -249,7 +249,7 @@ public class signup extends AppCompatActivity {
 
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        if(idcheckflag == 1 && passcheckflag ==1){
+        if(idcheckflag == 1 && passcheckflag ==1 && passflag == 1){
             queue.add(loginRequest);//전송
         }else if (idcheckflag == 0){//아이디 중복체크를 했는지 확인
             Toast.makeText(getApplicationContext(),"아이디 중복체크를 해주세요!",Toast.LENGTH_SHORT).show();
