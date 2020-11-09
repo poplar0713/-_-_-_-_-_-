@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import ssh, connect
 
 rating_pred_df = pd.read_csv('rating_pred_df.csv')
 rating_pred_df = rating_pred_df.set_index('Unnamed: 0')
@@ -15,14 +16,32 @@ def get_unvisit(user_id):
 
     return unvisit_list
 
+def get_list(user_id, top_n = 20):
+    with ssh.Tunnel() as tunnel:
+        with connect.Connect(port=tunnel.local_bind_port) as conn:
+            unvisit_list = get_unvisit(user_id)
+            recomm_pl = rating_pred_df.loc[f'{user_id}', unvisit_list].sort_values(ascending=False)[:top_n]
+            recomm_pl = recomm_pl.index.values.tolist()
 
-def get_list(user_id, top_n = 20) :
+            tmp = '(99999999'
+            for str in recomm_pl:
+                tmp = tmp + ',' + str
+            tmp = tmp + ')'
 
-    unvisit_list = get_unvisit(user_id)
-    recomm_pl = rating_pred_df.loc[f'{user_id}', unvisit_list].sort_values(ascending=False)[:top_n]
-    recomm_pl = recomm_pl.index.values.tolist()
+            sql = f"select label, address, depiction from crawling_tour where tid IN {tmp}"
+            df = pd.read_sql_query(sql, conn)
+            l = list()
+            x = 0
+            while x < len(df.index) :
+                j = {}
+                label = df.iloc[x]['label']
+                address = df.iloc[x]['address']
+                img = df.iloc[x]['depiction']
+                j["label"] = label
+                j["address"] = address
+                j["img"] = img
+                l.append(j)
+                x = x+1
 
-    return recomm_pl
-
-
+            return l
 

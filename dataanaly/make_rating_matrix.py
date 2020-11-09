@@ -28,6 +28,7 @@ def make_matrix() :
 
             item_sim_df = pd.DataFrame(data=item_sim, index=ratings_matrix.columns, columns=ratings_matrix.columns)
             print("==Similarity sort ok==")
+            item_sim_df.to_csv('item_sim.csv', mode='w', encoding='utf-8-sig')
 
             def predict_rating_topsim(ratings_arr, item_sim_arr, n=20):
                 pred = np.zeros(ratings_arr.shape)
@@ -42,12 +43,9 @@ def make_matrix() :
                 return pred
 
             rating_pred = predict_rating_topsim(ratings_matrix.values, item_sim_df.values, n=len(ratings_matrix.columns))
-
             rowlist = ratings_matrix.index.values.tolist()
             collist = ratings_matrix.columns.values.tolist()
-
             ratings_pred_df = pd.DataFrame(data=rating_pred, index=rowlist, columns=collist)
             #print(ratings_pred_df)
-
             ratings_pred_df.to_csv('rating_pred_df.csv', mode='w', encoding='utf-8-sig')
             print("======= 예측평점 리스트 생성 완료 =======")

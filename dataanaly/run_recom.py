@@ -1,5 +1,5 @@
 import get_Recom_list
 
-list = get_Recom_list.get_list('ohee78')
+dic = get_Recom_list.get_list('1133')
 
-print(list)
+print(dic)
