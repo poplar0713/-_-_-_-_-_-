@@ -16,7 +16,7 @@ def get_unvisit(user_id):
 
     return unvisit_list
 
-def get_list(user_id, top_n = 20):
+def get_list(user_id, top_n = 30):
     with ssh.Tunnel() as tunnel:
         with connect.Connect(port=tunnel.local_bind_port) as conn:
             unvisit_list = get_unvisit(user_id)

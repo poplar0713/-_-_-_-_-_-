@@ -4,7 +4,7 @@ import random
 import distance
 
 #분석에 필요한 데이터들을 로드, 가공하여 주는 클래스
-class AnalysisCBF:
+class Analysis:
 
     pick_number = 4
     distance = distance.GPSDistance()
@@ -14,12 +14,12 @@ class AnalysisCBF:
             with ssh.Tunnel() as tunnel:
                 with connect.Connect(port=tunnel.local_bind_port) as conn:
                     #사용자 선호도 데이터를 로드
-                    sql = f"select * from analysis_tour where uid = '{user_id}' and grade"
+                    sql = f"select * from analysis_tour where uid = '{user_id}'"
                     self.analy_df = pd.read_sql_query(sql, conn)
                     self.analy_df = self.analy_df.drop_duplicates(['TID'])
 
                     #여행지 정보를 로드
-                    sql = "select TID, label, address, category, grade, vote_count, gps_lat, gps_long from crawling_tour"
+                    sql = "select TID, label, address, category, depiction, grade, vote_count, gps_lat, gps_long from crawling_tour"
                     self.tour_df = pd.read_sql_query(sql, conn)
                     # self.tour_df.set_index('TID', inplace=True)
                     # print(type(float(self.tour_df['gps_lat'].iloc[0])))

@@ -15,7 +15,7 @@ def getTourList(base_address, user_id, start_date, end_date):
 
     start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
-    a = analy.AnalysisCBF(user_id)
+    a = analy.Analysis(user_id)
 
     good_df = a.analy_df[a.analy_df['GRADE'] > -1]
     bad_df = a.analy_df[a.analy_df['GRADE'] < 0]
@@ -82,7 +82,7 @@ def getTourList(base_address, user_id, start_date, end_date):
                     result_df = result_df.append(anal_dst, ignore_index=True)
 
         result_df = result_df.drop_duplicates(['label'])
-        result_df = result_df[result_df['category'].str.contains('자연|인문|레포츠|쇼핑', na=False)]
+        result_df = result_df[result_df['category'].str.contains('자연|인문|레포츠|쇼핑|카페', na=False)]
 
         t = result_df.sort_values('grade', ascending=False)[:(days * 20)]
         # 선정된 여행지들을 평점순으로 정렬
