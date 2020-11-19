@@ -5,18 +5,8 @@ import get_Recom_list
 import time
 import ssh, connect
 
-def get_ex(group_no, uid):
-    with ssh.Tunnel() as tunnel:
-        # read sql data, make dataframe
-        with connect.Connect(port=tunnel.local_bind_port) as conn:
-            sql = f"select TID from schedule where uid = {uid} and schedule_name = {group_no}"
-            df = pd.read_sql_query(sql, conn)
-
-            return df
-
-def make_list(user_id, base_point, group_no):
+def make_list(user_id, base_point, group_no, already_ex_list):
     strat = time.time()
-    already_ex = get_ex(group_no, user_id)
     a = analy.Analysis(user_id)
     print(time.time() - strat)
     bad_df = a.analy_df[a.analy_df['GRADE'] < 0]
@@ -27,24 +17,25 @@ def make_list(user_id, base_point, group_no):
     recomm_pl = get_Recom_list.rating_pred_df.loc[f'{user_id}', unvisit_list].sort_values(ascending=False)[:500]
     recomm_pl = recomm_pl.index.values.tolist()
     target_df = a.tour_df[a.tour_df['category'].str.contains('자연|인문|레포츠|쇼핑|카페|경기장|도서관|문화전수시설|문화원|공연장', na=False)]
+    #target_df = target_df[target_df['address'].str.contains(f'{base_point}', na=False)]
 
     print(time.time() - strat)
 
-    tmp1_df = pd.DataFrame(columns=['TID', 'label', 'address', 'depiction', 'grade', 'vote_count'])
-    tmp2_df = pd.DataFrame(columns=['TID', 'label', 'address', 'depiction', 'grade', 'vote_count'])
+    tmp1_df = pd.DataFrame(columns=['TID', 'label', 'address', 'description', 'depiction', 'grade', 'vote_count'])
+    tmp2_df = pd.DataFrame(columns=['TID', 'label', 'address', 'description', 'depiction', 'grade', 'vote_count'])
 
     for i in recomm_pl:
         tmp = target_df[target_df['TID'] == i]
         tmp1_df = tmp1_df.append(tmp, ignore_index=True)
 
-    result_df = pd.DataFrame(columns=['TID', 'label', 'address', 'depiction', 'grade', 'vote_count'])
+    result_df = pd.DataFrame(columns=['TID', 'label', 'description', 'address', 'depiction', 'grade', 'vote_count'])
 
     print(time.time() - strat)
 
     for r in tmp1_df['TID']:
         if (bad_df['TID'] == r).any():
             continue
-        if (already_ex['TID'] == r).any():
+        if r in already_ex_list:
             continue
 
         anal_dst = target_df[target_df['TID'] == r]
@@ -61,7 +52,7 @@ def make_list(user_id, base_point, group_no):
 
         if (bad_df['TID'] == l).any():
             continue
-        if (already_ex['TID'] == l).any():
+        if l in already_ex_list:
             continue
         anal_dst = target_df[target_df['TID'] == l]
 
@@ -86,11 +77,16 @@ def make_list(user_id, base_point, group_no):
     while x < len(result_df.index):
         j = {}
         label = result_df.iloc[x]['label']
-        address = result_df.iloc[x]['address']
+        info = result_df.iloc[x]['description']
         img = result_df.iloc[x]['depiction']
-        j["label"] = label
-        j["address"] = address
+        tid = result_df.iloc[x]['TID']
+
+        j["name"] = label
         j["img"] = img
+        j["info"] = info
+        j["tid"] = tid
+        j["group_no"] = group_no
+
         l.append(j)
         x = x + 1
     print(time.time() - strat)

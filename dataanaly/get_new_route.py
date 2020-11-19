@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import Analysis as analy
-from queue import Queue
 import time
 import datetime
 
@@ -21,15 +20,12 @@ def get_list(tid_list, user_id, start_date, end_date):
         x = x + 1
     y = 0
     put_temp = numOfoneday - 1
-    #print(queue_list)
 
     for i in range(len(temp_list)):
-        #print(f'y = [{y}], i = [{i}]')
         queue_list[y].append(temp_list[i])
         if (i + 1) % (put_temp) == 0:
             y = y + 1
         if len(queue_list) <= y:
-            # queue_list[y-1].append(temp_list[i+1:].values)
             while i < len(temp_list):
                 queue_list[y - 1].append(temp_list[i])
                 i += 1
@@ -42,22 +38,16 @@ def get_list(tid_list, user_id, start_date, end_date):
         x = x + 1
 
     while len(queue_list[days]) > 0:
-        #print(queue_list)
         for k in range(len(dis_list)):
             dis_list[k] = 0
         for i in range(len(queue_list) - 1):
 
             for j in range(len(queue_list[i]) - 1):
                 anal_src = a.tour_df[a.tour_df['TID'] == queue_list[i][j]]
-                #print(f'queue[{i}][{j}]')
-                #print(f'{anal_src}')
                 a.set_src_point(anal_src)
                 anal_dst = a.tour_df[a.tour_df['TID'] == queue_list[i][j + 1]]
-                #print(f'queue[{i}][{j + 1}]')
-                #print(f'{anal_dst}')
                 a.set_dst_point(anal_dst)
                 dis_list[i] = dis_list[i] + a.get_distance()
-                #print(dis_list)
 
         shortest_ind = days - 1
 
@@ -72,8 +62,6 @@ def get_list(tid_list, user_id, start_date, end_date):
             queue_list[j - 1].append(queue_list[j].pop(0))
             j += 1
 
-    #print(queue_list)
-
     v = 0
     j_list = list()
 
@@ -82,10 +70,10 @@ def get_list(tid_list, user_id, start_date, end_date):
         while len(queue_list[v]) > m:
             j = {}
             tmp = a.tour_df[a.tour_df['TID'] == queue_list[v][m]]
-            j["label"] = tmp.iloc[0]['label']
-            j["address"] = tmp.iloc[0]['address']
+            j["tid"] = tmp.iloc[0]['TID']
+            j["name"] = tmp.iloc[0]['label']
             j["img"] = tmp.iloc[0]['depiction']
-            j["description"] = tmp.iloc[0]['description']
+            j["info"] = tmp.iloc[0]['description']
             j["date"] = datetime.datetime.strftime((start_date + datetime.timedelta(days=v)), '%Y-%m-%d')
             j["time"] = m
             j_list.append(j)
