@@ -1,9 +1,11 @@
 package com.example.travolo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -71,6 +74,18 @@ public class login extends AppCompatActivity {
         textView = findViewById(R.id.area);
         textView.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, list));//여행지 검색 시 자동 완성을 위한 리스트 설정
 
+        textView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction() == KeyEvent.ACTION_DOWN)&&(keyCode == KeyEvent.KEYCODE_ENTER)){
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(textView.getWindowToken(),0);
+                    return true;
+                }
+                return false;
+            }
+        });
+
 
         button = findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +94,7 @@ public class login extends AppCompatActivity {
                 final String areadata = textView.getText().toString();//선택한 지역을 전송
                 if(list.contains(areadata)) {//리스트에 지역이 있는경우
                     Intent intent = new Intent(login.this, period.class);//기간선택 화면으로 이동
+                    globallist.getInstance().setAddress(areadata);
                     intent.putExtra("area", areadata);
                     startActivity(intent);
                 }else{//지역이 없는 경우
@@ -90,11 +106,38 @@ public class login extends AppCompatActivity {
         setRecycler();
 
         adapter = new eventAdapter(item,this);
-        RecyclerView recyclerView = findViewById(R.id.recycler_best);
+        final RecyclerView recyclerView = findViewById(R.id.recycler_best);
         linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);//세로로 리스트를 띄움
         linearLayoutManager.setSmoothScrollbarEnabled(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+        Thread th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int num = 0;
+                while (true) {
+                        RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {//버튼을 누를시 해당 일차의 여행일정으로 이동
+                            @Override
+                            protected int getVerticalSnapPreference() {
+                                return LinearSmoothScroller.SNAP_TO_START;//해당 일차를 화면의 제일 위로 표시
+                            }
+                        };
+                        smoothScroller.setTargetPosition(num);
+                        recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);//리스트에 적용
+                    if(num < item.size()){
+                        num++;
+                    }else{
+                        num = 0;
+                    }
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        th.start();
 
 
 
@@ -120,17 +163,11 @@ public class login extends AppCompatActivity {
 
                 }
 
-                else if(id == R.id.plan){//생성된 여행일정 페이지
+                else if(id == R.id.plan) {//생성된 여행일정 페이지
                     Intent intent2 = new Intent(login.this, historylist.class);
                     startActivity(intent2);
                 }
-                else if(id == R.id.event){
-                    Intent intent1 = new Intent(login.this, eventlist.class);
-                    intent1.putExtra("id",id);
-                    startActivity(intent1);
-                }
                 else if(id == R.id.notice){//공지사항 페이지
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
                 }
                 else if(id == R.id.setting){//환경설정 페이지
                     Intent intent3 = new Intent(login.this, setting.class);
@@ -255,9 +292,10 @@ public class login extends AppCompatActivity {
 
         Map<String, String> params = new HashMap<>();
         params.put("user_id",uid);
+        JSONObject jsonObject = new JSONObject(params);
 
         JSONArray jsonArray = new JSONArray();
-        jsonArray.put(params);
+        jsonArray.put(jsonObject);
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST,URL,jsonArray, listener, errorListener);
         queue = Volley.newRequestQueue(this);
         queue.add(request);

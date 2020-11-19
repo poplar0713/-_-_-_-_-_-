@@ -21,8 +21,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -97,7 +95,7 @@ public class datex {
         appCompatButton2.perform(click());
 
         ViewInteraction appCompatButton5 = onView(
-                allOf(withId(R.id.make), withText("일정 생성!"),
+                allOf(withId(R.id.auto_make), withText("일정 생성!"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.drawer_layout),

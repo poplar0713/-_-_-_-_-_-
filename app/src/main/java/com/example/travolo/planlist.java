@@ -1,5 +1,6 @@
 package com.example.travolo;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,8 +48,9 @@ public class planlist extends AppCompatActivity {
     private RequestQueue queue;
     LinearLayoutManager linearLayoutManager;
     private ArrayList<plan> item = new ArrayList<>();
+    private ArrayList<Integer> pos = new ArrayList<>();
     LinearLayout layout;
-    Button button;
+    Button button, editbtn;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,13 +60,14 @@ public class planlist extends AppCompatActivity {
 
         setRecycle_plan(id);
 
+
         DisplayMetrics dm = getResources().getDisplayMetrics();//dp치수를 설정하기위한 메소드
         int size = Math.round(10 * dm.density);//size를 10dp로 설정
         layout = findViewById(R.id.btnline);//버튼을 생성할 레이아웃
         for(int i = 0; i<globallist.getInstance().getDate(); i++){
             Button btn = new Button(this);//새로운 버튼을 생성
+            final int j = i;
             btn.setText(i+1+"일");//날짜 표시
-            final int position = i * 4;
             btn.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.btn));//버튼 이미지 설정
             btn.setTextColor(Color.WHITE);
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(size * 4,size * 4);//버튼 사이즈 조절
@@ -75,6 +78,7 @@ public class planlist extends AppCompatActivity {
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    int position = globallist.getInstance().getPosition(j);
                     RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(recyclerView.getContext()){//버튼을 누를시 해당 일차의 여행일정으로 이동
                         @Override
                         protected int getVerticalSnapPreference() {
@@ -116,6 +120,14 @@ public class planlist extends AppCompatActivity {
             }
         });
 
+        editbtn = findViewById(R.id.editplan);
+        editbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(planlist.this, editplan.class);
+                startActivity(intent);
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -135,17 +147,20 @@ public class planlist extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if(id == R.id.plan){
-                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                if(id == R.id.homepage){
+                    Intent intent2 = new Intent(planlist.this, login.class);
+                    startActivity(intent2);
+                    finish();
                 }
-                else if(id == R.id.event){
-                    Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.plan) {//생성된 여행일정 페이지
+                    Intent intent2 = new Intent(planlist.this, historylist.class);
+                    startActivity(intent2);
                 }
-                else if(id == R.id.notice){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.notice){//공지사항 페이지
                 }
-                else if(id == R.id.setting){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.setting){//환경설정 페이지
+                    Intent intent3 = new Intent(planlist.this, setting.class);
+                    startActivity(intent3);
                 }
 
                 return true;
@@ -202,9 +217,21 @@ public class planlist extends AppCompatActivity {
                         String img = jsonObject.getString("img");//여행지 사진
                         String info = jsonObject.getString("info");//여행지 설명
                         String tid = jsonObject.getString("tid");//여행지 tid
-                        item.add(new plan(tid,name,img,info));
+                        String date = jsonObject.getString("date");
+                        String time = jsonObject.getString("time");
+                        String address = jsonObject.getString("address");
+                        globallist.getInstance().setAddress(address);
+                        String start = jsonObject.getString("start");//여행일정 기간
+                        String end = jsonObject.getString("end");
+                        globallist.getInstance().setStartdate(start);
+                        globallist.getInstance().setEnddate(end);
+                        item.add(new plan(tid,name,img,info,date,time));
+                        if(time.equals("0"))
+                            pos.add(i);
                         adapter.notifyItemInserted(0);
                     }
+                    globallist.getInstance().setPosition(pos);
+                    globallist.getInstance().setPlans(item);
                 }catch (JSONException e){
                     e.printStackTrace();
                 }

@@ -33,21 +33,17 @@ public class planAdapter extends RecyclerView.Adapter<planAdapter.ViewHolder> im
     }
 
     @Override
-    public void onBindViewHolder(@NonNull planAdapter.ViewHolder holder, int position) {//각 아이템별 설정
-        int day = 0;
-
+    public void onBindViewHolder(@NonNull planAdapter.ViewHolder holder, int position) {//각 아이템별 설
         plan item = items.get(position);
+        String []day = item.getDate().split("-");
         holder.name.setText("이름 : "+item.getName());//이름 표시
         holder.info.setText("설명 : "+item.getInfo());//설명 표시
         Glide.with(context).load(item.getImage()).into(holder.image);//여행지 사진 등록
-        int itemposition = holder.getAdapterPosition();
-        if(itemposition % 4 == 0) {//일정이 하루에 4개로 설정 되어 있기에 4로 나누어 떨어지면 몇일차인지 표시
-            day = itemposition / 4;
-            holder.date.setVisibility(View.VISIBLE);//레이아웃을 보이게 설정
-            holder.date.setText(day + 1 + "일차 일정");
-        }else{
-                holder.date.setVisibility(View.GONE);//나누어떨어지지 않으면 숨김
-        }
+        if(item.getTime().equals("0")){
+            holder.date.setVisibility(View.VISIBLE);
+            holder.date.setText(day[2]+"일 일정");
+        }else
+            holder.date.setVisibility(View.GONE);
     }
     public void setOnItemClicklistener(onPlanItemClickListener listener){//아이템을 선택한경우
         this.listener = listener;

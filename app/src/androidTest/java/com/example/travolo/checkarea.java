@@ -138,7 +138,7 @@ public class checkarea {
         appCompatButton4.perform(scrollTo(), click());
 
         ViewInteraction appCompatButton5 = onView(
-                allOf(withId(R.id.make), withText("일정 생성!"),
+                allOf(withId(R.id.auto_make), withText("일정 생성!"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.drawer_layout),

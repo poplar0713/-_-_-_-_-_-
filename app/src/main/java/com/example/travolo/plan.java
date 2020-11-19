@@ -5,12 +5,16 @@ public class plan {
     private String image;
     private String info;
     private String tid;
+    private String date;
+    private String time;
 
-    public plan(String tid, String name, String image, String info) {
+    public plan(String tid, String name, String image, String info, String date, String time) {
         this.name = name;
         this.image = image;
         this.info = info;
         this.tid = tid;
+        this.date = date;
+        this.time = time;
     }
 
     public String getName() {
@@ -29,6 +33,13 @@ public class plan {
         this.image = image;
     }
 
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
 
     public String getTid() {
         return tid;
@@ -44,5 +55,13 @@ public class plan {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

@@ -56,6 +56,7 @@ public class plan_map extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
     LinearLayout linearLayout,liner;
+    int start = 0, end = 0, cnt;
     ArrayList<route> item;
 
     Button bt;
@@ -76,12 +77,18 @@ public class plan_map extends AppCompatActivity {
 
         setRoute(id, group_no);
         liner = findViewById(R.id.datebtn);
+
         DisplayMetrics dm = getResources().getDisplayMetrics();//dp치수를 설정하기위한 메소드
         int size = Math.round(10 * dm.density);
         for(int i = 0; i<globallist.getInstance().getDate(); i++) {
             Button btn = new Button(this);//새로운 버튼을 생성
             btn.setText(i + 1 + "일");//날짜 표시
-            final int position = i * 4;
+            end = start;
+            for(int k = start; k< cnt; k++){
+                if(item.get(k).getFlag() == i){
+                    end++;
+                }
+            }
             btn.setBackground(getApplicationContext().getResources().getDrawable(R.drawable.btn));//버튼 이미지 설정
             btn.setTextColor(Color.WHITE);
             LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(size * 4, size * 4);//버튼 사이즈 조절
@@ -89,16 +96,16 @@ public class plan_map extends AppCompatActivity {
             param.leftMargin = size;//버튼 마진 설정
             param.rightMargin = size;//버튼 마진 설정
             btn.setLayoutParams(param);
-            final int j = i*4;
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TMapPoint tMapPointStart = new TMapPoint(item.get(j).getX(),item.get(j).getY()); // SKT타워(출발지)
-                    TMapPoint tMapPointEnd = new TMapPoint(item.get(j+3).getX(),item.get(j+3).getY());
+                    TMapPoint tMapPointStart = new TMapPoint(item.get(start).getX(),item.get(start).getY()); // SKT타워(출발지)
+                    TMapPoint tMapPointEnd = new TMapPoint(item.get(end).getX(),item.get(end).getY());
                     ArrayList<TMapPoint> pathlist = new ArrayList<>();
                     ArrayList<TMapPoint> point = new ArrayList<>();
-                    pathlist.add(new TMapPoint(item.get(j+1).getX(),item.get(j+1).getY()));
-                    pathlist.add(new TMapPoint(item.get(j+2).getX(),item.get(j+2).getY()));// N서울타워(목적지)
+                    for(int t = start; t<end+1;t++) {
+                        pathlist.add(new TMapPoint(item.get(t).getX(), item.get(t).getY()));
+                    }
                     try {
                         searchRoute(tMapPointStart,tMapPointEnd,tMapView, pathlist);
                     } catch (ParserConfigurationException e) {
@@ -108,11 +115,9 @@ public class plan_map extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    point.add(new TMapPoint(item.get(j).getX(),item.get(j).getY()));
-                    point.add(new TMapPoint(item.get(j+1).getX(),item.get(j+1).getY()));
-                    point.add(new TMapPoint(item.get(j+2).getX(),item.get(j+2).getY()));
-                    point.add(new TMapPoint(item.get(j+3).getX(),item.get(j+3).getY()));
-
+                    for(int k = start; k<end+1; k++) {
+                        point.add(new TMapPoint(item.get(k).getX(), item.get(k).getY()));
+                    }
                     TMapInfo info = tMapView.getDisplayTMapInfo(point);
                     TMapPoint tMapPoint = info.getTMapPoint();
                     tMapView.setCenterPoint(tMapPoint.getLongitude(),tMapPoint.getLatitude());
@@ -120,7 +125,10 @@ public class plan_map extends AppCompatActivity {
                 }
             });
             liner.addView(btn);//레이아웃에 버튼 추가
+            start = end+1;
         }
+
+
         bt = findViewById(R.id.planlistbtn);
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,17 +155,20 @@ public class plan_map extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if(id == R.id.plan){
-                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                if(id == R.id.homepage){
+                    Intent intent2 = new Intent(plan_map.this, login.class);
+                    startActivity(intent2);
+                    finish();
                 }
-                else if(id == R.id.event){
-                    Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.plan) {//생성된 여행일정 페이지
+                    Intent intent2 = new Intent(plan_map.this, historylist.class);
+                    startActivity(intent2);
                 }
-                else if(id == R.id.notice){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.notice){//공지사항 페이지
                 }
-                else if(id == R.id.setting){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.setting){//환경설정 페이지
+                    Intent intent3 = new Intent(plan_map.this, setting.class);
+                    startActivity(intent3);
                 }
 
                 return true;
@@ -212,8 +223,10 @@ public class plan_map extends AppCompatActivity {
                         JSONObject jsonObject = response.getJSONObject(i);
                         String x = jsonObject.getString("gps_lat");//여행지 이름
                         String y = jsonObject.getString("gps_long");//여행지 사진
-                        item.add(new route(Double.parseDouble(x),Double.parseDouble(y)));
+                        int flag = jsonObject.getInt("flag");
+                        item.add(new route(Double.parseDouble(x),Double.parseDouble(y),flag));
                     }
+                    cnt = item.size();
                 }catch (JSONException e){
                     Toast.makeText(context,"서버오류",Toast.LENGTH_SHORT).show();
                 }
@@ -222,7 +235,7 @@ public class plan_map extends AppCompatActivity {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context,"서버오류",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"net error",Toast.LENGTH_SHORT).show();
             }
         };
         Map<String, String> params = new HashMap<>();
@@ -239,7 +252,7 @@ public class plan_map extends AppCompatActivity {
     }
     public void searchRoute(TMapPoint start, TMapPoint end, final TMapView mapView, ArrayList<TMapPoint> passlist) throws ParserConfigurationException, SAXException, IOException {
         TMapData data = new TMapData();
-        data.findPathDataWithType(TMapData.TMapPathType.CAR_PATH, start, end, passlist, 0, new TMapData.FindPathDataListenerCallback() {
+        data.findPathDataWithType(TMapData.TMapPathType.CAR_PATH , start, end, passlist, 0, new TMapData.FindPathDataListenerCallback() {
             @Override
             public void onFindPathData(TMapPolyLine tMapPolyLine) {
                 tMapPolyLine.setLineColor(R.color.colorAccent);

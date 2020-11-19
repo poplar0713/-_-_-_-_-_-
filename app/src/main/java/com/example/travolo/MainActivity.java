@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -61,6 +62,30 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
         lg_id = auto.getString("inputid", null);
         lg_pw = auto.getString("inputpw", null);
+
+        id.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction() == KeyEvent.ACTION_DOWN)&&(keyCode == KeyEvent.KEYCODE_ENTER)){
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(id.getWindowToken(),0);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        pw.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction() == KeyEvent.ACTION_DOWN)&&(keyCode == KeyEvent.KEYCODE_ENTER)){
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(pw.getWindowToken(),0);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         btn_lg.setOnClickListener(new View.OnClickListener() {
             @Override

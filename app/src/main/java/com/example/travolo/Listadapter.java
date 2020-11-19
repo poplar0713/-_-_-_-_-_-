@@ -45,9 +45,6 @@ public class Listadapter extends RecyclerView.Adapter<Listadapter.ViewHolder> im
         return items.size();
     }
 
-    public ArrayList<preference> getItems(){
-        return items;
-    }
 
     @Override
     public void onItemDismiss(int position) {//아이템을 밀어서 삭제하는 경우

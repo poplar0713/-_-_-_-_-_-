@@ -1,13 +1,16 @@
 package com.example.travolo;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -57,6 +60,18 @@ public class signup extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        id = findViewById(R.id.id);
+        id.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction() == KeyEvent.ACTION_DOWN)&&(keyCode == KeyEvent.KEYCODE_ENTER)){
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(id.getWindowToken(),0);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         button2 = findViewById(R.id.check);//아이디 중복체크 버튼
         button2.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +82,29 @@ public class signup extends AppCompatActivity {
         });//아이디 중복 체크
         
         password = findViewById(R.id.password);//비밀번호
+        password.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction() == KeyEvent.ACTION_DOWN)&&(keyCode == KeyEvent.KEYCODE_ENTER)){
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(password.getWindowToken(),0);
+                    return true;
+                }
+                return false;
+            }
+        });
         passwordcheck = findViewById(R.id.passwordcheck);//비밀번호 확인
+        passwordcheck.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction() == KeyEvent.ACTION_DOWN)&&(keyCode == KeyEvent.KEYCODE_ENTER)){
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(passwordcheck.getWindowToken(),0);
+                    return true;
+                }
+                return false;
+            }
+        });
         imageView = findViewById(R.id.image);
 
         passcheck = findViewById(R.id.passcheck);
@@ -119,6 +156,18 @@ public class signup extends AppCompatActivity {
 
             }
         });
+        birthdate = findViewById(R.id.birthdate);
+        birthdate.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if((event.getAction() == KeyEvent.ACTION_DOWN)&&(keyCode == KeyEvent.KEYCODE_ENTER)){
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(birthdate.getWindowToken(),0);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         button = findViewById(R.id.signup);//회원가입 버튼
         button.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +191,7 @@ public class signup extends AppCompatActivity {
 
     public void checkID() {//아이디 확인
         check = findViewById(R.id.idcheck);
-        id = findViewById(R.id.id);
+
         final String user_id = id.getText().toString();
         String URL = "http://211.253.26.214:8080/travolo2/post/checkId";//통신할 서버 url
 
@@ -196,7 +245,7 @@ public class signup extends AppCompatActivity {
         id = findViewById(R.id.id);
         password = findViewById(R.id.password);
         name = findViewById(R.id.name);
-        birthdate = findViewById(R.id.birthdate);
+
         radio = findViewById(R.id.radio);
         RadioButton rd = findViewById(radio.getCheckedRadioButtonId());
 

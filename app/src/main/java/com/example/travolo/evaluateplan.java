@@ -88,17 +88,20 @@ public class evaluateplan extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if(id == R.id.plan){
-                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                if(id == R.id.homepage){
+                    Intent intent2 = new Intent(evaluateplan.this, login.class);
+                    startActivity(intent2);
+                    finish();
                 }
-                else if(id == R.id.event){
-                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.plan) {//생성된 여행일정 페이지
+                    Intent intent2 = new Intent(evaluateplan.this, historylist.class);
+                    startActivity(intent2);
                 }
-                else if(id == R.id.notice){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.notice){//공지사항 페이지
                 }
-                else if(id == R.id.setting){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.setting){//환경설정 페이지
+                    Intent intent3 = new Intent(evaluateplan.this, setting.class);
+                    startActivity(intent3);
                 }
 
                 return true;

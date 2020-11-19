@@ -30,9 +30,9 @@ public class progress_loading extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        area = intent.getExtras().getString("area");//여행지
-        from = intent.getExtras().getString("from");//출발일
-        to = intent.getExtras().getString("to");//종료일
+        area = globallist.getInstance().getAddress();
+        from = globallist.getInstance().getStartdate();
+        to = globallist.getInstance().getEnddate();
 
         ImageView image = findViewById(R.id.iv_frame_loading);
         Glide.with(this).load(R.drawable.fish).into(image);//로딩화면을 화면에 띄움

@@ -78,17 +78,20 @@ public class historylist extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if(id == R.id.plan){
-                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                if(id == R.id.homepage){
+                    Intent intent2 = new Intent(historylist.this, login.class);
+                    startActivity(intent2);
+                    finish();
                 }
-                else if(id == R.id.event){
-                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.plan) {//생성된 여행일정 페이지
+                    Intent intent2 = new Intent(historylist.this, historylist.class);
+                    startActivity(intent2);
                 }
-                else if(id == R.id.notice){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.notice){//공지사항 페이지
                 }
-                else if(id == R.id.setting){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.setting){//환경설정 페이지
+                    Intent intent3 = new Intent(historylist.this, setting.class);
+                    startActivity(intent3);
                 }
 
                 return true;
@@ -130,7 +133,9 @@ public class historylist extends AppCompatActivity {
                     for(int i=0;i<response.length();i++) {
                         JSONObject jsonObject = response.getJSONObject(i);
                         String name = jsonObject.getString("schedule_name");//여행지 이름
-                        String num = jsonObject.getString("date");//여행일정 기간
+                        String start = jsonObject.getString("start");//여행일정 기간
+                        String end = jsonObject.getString("end");
+                        String num = start+"~\n"+end;
                         String historynum = jsonObject.getString("group_no");//여행일정 번호s
                         int count = jsonObject.getInt("count");
                         item.add(new history(name, num, historynum, count));

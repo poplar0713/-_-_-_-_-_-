@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="44dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:gravity="center"
+            android:text="여행 일정 편집" />
+
+        <Button
+            android:id="@+id/editinsert"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:text="추가"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/editcancle"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:text="취소" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout8"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/editsave"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout7">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_editplan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/editsave"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1"
+        android:background="@color/colorAccent"
+        android:text="저장"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

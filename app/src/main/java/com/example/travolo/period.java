@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -32,7 +31,7 @@ public class period extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
     TextView textView,textView2;
-    Button button;
+    Button button, btn;
     SimpleDateFormat format;
     private DatePickerDialog.OnDateSetListener callbackMethod;
     private DatePickerDialog.OnDateSetListener callbackMethod2;
@@ -76,7 +75,7 @@ public class period extends AppCompatActivity {
                 dialog2.show();
             }
         });
-        button = findViewById(R.id.make);
+        button = findViewById(R.id.auto_make);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {//선택한 기간과 선택지를 서버로 전달하기위해 로딩페이지로 전달
@@ -96,9 +95,17 @@ public class period extends AppCompatActivity {
                 }catch (ParseException e){
 
                 }
-                intent.putExtra("area",area);//여행지
-                intent.putExtra("from",from);//시작일
-                intent.putExtra("to",to);//종료일
+                globallist.getInstance().setAddress(area);
+                globallist.getInstance().setStartdate(from);
+                globallist.getInstance().setEnddate(to);
+                startActivity(intent);
+            }
+        });
+        btn = findViewById(R.id.select_place);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(period.this, select_place.class);
                 startActivity(intent);
             }
         });
@@ -120,17 +127,20 @@ public class period extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 String title = menuItem.getTitle().toString();
 
-                if(id == R.id.plan){
-                    Toast.makeText(context, title + ": 계정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                if(id == R.id.homepage){
+                    Intent intent2 = new Intent(period.this, login.class);
+                    startActivity(intent2);
+                    finish();
                 }
-                else if(id == R.id.event){
-                    Toast.makeText(context, title + ": 설정 정보를 확인합니다.", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.plan) {//생성된 여행일정 페이지
+                    Intent intent2 = new Intent(period.this, historylist.class);
+                    startActivity(intent2);
                 }
-                else if(id == R.id.notice){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.notice){//공지사항 페이지
                 }
-                else if(id == R.id.setting){
-                    Toast.makeText(context, title + ": 로그아웃 시도중", Toast.LENGTH_SHORT).show();
+                else if(id == R.id.setting){//환경설정 페이지
+                    Intent intent3 = new Intent(period.this, setting.class);
+                    startActivity(intent3);
                 }
 
                 return true;

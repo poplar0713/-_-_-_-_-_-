@@ -30,7 +30,6 @@
         <activity android:name=".progress_loading"/>
         <activity android:name=".planlist" android:parentActivityName=".login"/>
         <activity android:name=".signup" />
-        <activity android:name=".eventlist"/>
         <activity android:name=".historylist"/>
         <activity android:name=".checkpwd"/>
         <activity android:name=".changepwd"/>
@@ -43,7 +42,13 @@
         <activity android:name=".areainfo"/>
         <activity android:name=".findresult"/>
         <activity android:name=".evaluateplan"/>
-        <activity android:name=".sample"/>
+        <activity android:name=".editplan"/>
+        <activity android:name=".rebuild_plan"/>
+        <activity android:name=".afterplan"/>
+        <activity android:name=".select_place"/>
+        <activity android:name=".recommendInsert"/>
+        <activity android:name=".recommend_loading"/>
+
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
 
