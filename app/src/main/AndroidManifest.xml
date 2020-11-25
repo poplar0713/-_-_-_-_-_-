@@ -45,7 +45,12 @@
         <activity android:name=".editplan"/>
         <activity android:name=".rebuild_plan"/>
         <activity android:name=".afterplan"/>
+        <activity android:name=".select_place_search"/>
         <activity android:name=".select_place"/>
+        <activity android:name=".select_loading"/>
+        <activity android:name=".sns_link_id"/>
+        <activity android:name=".sns_link_insert"/>
+        <activity android:name=".sns_link_loading"/>
         <activity android:name=".recommendInsert"/>
         <activity android:name=".recommend_loading"/>
 

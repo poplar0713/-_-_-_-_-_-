@@ -44,7 +44,8 @@ public class preferencAdapter extends RecyclerView.Adapter<preferencAdapter.View
         preference item = items.get(position);//아이템의 위치를 받아옴
         Glide.with(context).load(item.getImage()).into(viewHolder.image);
         viewHolder.name.setText(item.getName());
-        if(isItemSelected(position)){//선택한 아이템이 선택한 아이템리스트에 존재하지 않는 경우
+        int itempos = viewHolder.getAdapterPosition();
+        if(isItemSelected(itempos)){//선택한 아이템이 선택한 아이템리스트에 존재하지 않는 경우
             viewHolder.itemView.findViewById(R.id.card_linear).setBackgroundColor(R.color.colorAccent);//색을 바꿈
             viewHolder.name.setTextColor(Color.WHITE);
             itemselect.add(item);//선택한 아이템 리스트에 추가

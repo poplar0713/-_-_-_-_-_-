@@ -53,7 +53,7 @@ public class recommend_loading extends AppCompatActivity {
                         String tid = jsonObject.getString("tid");//여행지 tid
                         item.add(new plan(tid,name,img,info,null,null));
                     }
-                    globallist.getInstance().setRecommend(item);
+                    globallist.getInstance().setRecommend(item);//전역변수에 저장
                     Intent intent = new Intent(recommend_loading.this, recommendInsert.class);
                     startActivity(intent);
                     finish();
@@ -69,7 +69,7 @@ public class recommend_loading extends AppCompatActivity {
             }
         };
 
-        JSONObject jsonObject = new JSONObject();//맵형태의 정보를 json으로 전송
+        JSONObject jsonObject = new JSONObject();
         JSONArray jarray = new JSONArray();
         try{
             JSONArray jsonArray = new JSONArray();
@@ -78,10 +78,10 @@ public class recommend_loading extends AppCompatActivity {
                 object.put("tid",globallist.getInstance().gettidpos(i));//선택한 여행지의 tid를 서버에 전송하여 저장
                 jsonArray.put(object);
             }
-            jsonObject.put("user_id",id);
-            jsonObject.put("address",globallist.getInstance().getAddress());
-            jsonObject.put("group_no",globallist.getInstance().getGroup_no());
-            jsonObject.put("item",jsonArray);
+            jsonObject.put("user_id",id);//사용자 id
+            jsonObject.put("address",globallist.getInstance().getAddress());//여행지 주소
+            jsonObject.put("group_no",globallist.getInstance().getGroup_no());//여행일정 번호
+            jsonObject.put("item",jsonArray);//여행일정들
             jarray.put(jsonObject);
         }catch (JSONException e){
             e.printStackTrace();

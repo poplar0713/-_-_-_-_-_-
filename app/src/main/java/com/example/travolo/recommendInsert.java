@@ -55,7 +55,7 @@ public class recommendInsert extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                globallist.getInstance().setTid(adapter.getPlan());
+                globallist.getInstance().setTid(adapter.getPlan());//선택한 여행지들을 전역변수에 저장
                 Intent intent = new Intent(recommendInsert.this, editplan.class);
                 startActivity(intent);
                 finish();
@@ -64,5 +64,5 @@ public class recommendInsert extends AppCompatActivity {
     }
     public void setRecycle_plan(){
         item.addAll(globallist.getInstance().getRecommend());
-    }
+    }//전역변수에 있는 여행지를 불러오기
 }

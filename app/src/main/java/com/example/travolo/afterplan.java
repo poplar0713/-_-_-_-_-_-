@@ -53,14 +53,12 @@ public class afterplan extends AppCompatActivity {
             public void onClick(View v) {
                 save_edit_plan(id);
             }
-        });
+        });//저장버튼, 바뀐 여행일정을 데이터베이스에 저장
         reset = findViewById(R.id.reset);
         reset.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                globallist.getInstance().removeplans();
+            public void onClick(View v) {//리셋 버튼
                 globallist.getInstance().removeTid();
-                globallist.getInstance().removerecommend();
                 Intent intent = new Intent(afterplan.this, planlist.class);
                 startActivity(intent);
                 finish();

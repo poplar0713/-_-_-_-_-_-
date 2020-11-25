@@ -57,7 +57,7 @@ public class editplan extends AppCompatActivity {
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//확인 버튼
                 Intent intent = new Intent(editplan.this, rebuild_plan.class);
                 startActivity(intent);
                 finish();
@@ -65,7 +65,7 @@ public class editplan extends AppCompatActivity {
         });
         cancle.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//취소 버튼
                 globallist.getInstance().removeplans();
                 Intent intent = new Intent(editplan.this, planlist.class);
                 startActivity(intent);
@@ -74,7 +74,7 @@ public class editplan extends AppCompatActivity {
         });
         insert.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//여행지 추천 버튼
                 Intent intent = new Intent(editplan.this, recommend_loading.class);
                 startActivity(intent);
                 finish();
@@ -84,5 +84,5 @@ public class editplan extends AppCompatActivity {
 
     public void setRecycle_plan(){
         item.addAll(globallist.getInstance().getPlans());
-    }
+    }//전역변수에 저장된 여행지 리스트를 불러온다
 }

@@ -22,7 +22,7 @@ public class select_place extends AppCompatActivity {
     private ArrayList<preference> item = new ArrayList<preference>();
     RecyclerView recyclerView;
     EditText editText;
-    Button button;
+    Button button,btn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class select_place extends AppCompatActivity {
         editText = findViewById(R.id.search_place);
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {//엔터버튼을 누르면 키보드 내리기
                 if((event.getAction() == KeyEvent.ACTION_DOWN)&&(keyCode == KeyEvent.KEYCODE_ENTER)){
                     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                     inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(),0);
@@ -58,11 +58,20 @@ public class select_place extends AppCompatActivity {
         button = findViewById(R.id.search_place_button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {//여행지 검색 버튼
                 String place = editText.getText().toString();
-                Intent intent = new Intent(select_place.this, select_place.class );
+                Intent intent = new Intent(select_place.this, select_place_search.class );
+                intent.putExtra("area",place);
                 startActivity(intent);
-                finish();
+            }
+        });
+
+        btn = findViewById(R.id.bb);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {//선택한 여행지를 포함하여 여행일정 생성
+                Intent intent = new Intent(select_place.this, select_loading.class);
+                startActivity(intent);
             }
         });
     }

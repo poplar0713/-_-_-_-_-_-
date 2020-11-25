@@ -65,12 +65,12 @@
                 android:text="비밀번호 변경" />
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/sns_link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="30dp"
                 android:background="@drawable/btn3"
-                android:text="문의하기" />
+                android:text="SNS연동" />
 
             <Button
                 android:id="@+id/button8"

@@ -9,12 +9,32 @@ public class globallist {
     private ArrayList<plan> plans;
     private ArrayList<plan> recommend;
     private ArrayList<String> tid;
+    private ArrayList<route> routes;
     private String id;//로그인을 위한 아이디 저장
     private String startdate;
     private String enddate;
     private int date;
+    private int size;
     private String address;
     private String group_no;
+
+    public ArrayList<route> getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(ArrayList<route> routes) {
+        this.routes = routes;
+    }
+
+    public route getRouteposition(int position){
+        return routes.get(position);
+    }
+    public void removeRoute(){
+        this.routes.clear();
+    }
+    public int getRouteSize(){
+        return this.routes.size();
+    }
 
     public String getAddress() {
         return address;
@@ -128,6 +148,9 @@ public class globallist {
         for(int i =0; i< list.size(); i++){
             this.list.add(list.get(i));
         }
+    }
+    public void addsearch(preference p){
+        this.list.add(p);
     }
     public int getsize(){
         return this.list.size();

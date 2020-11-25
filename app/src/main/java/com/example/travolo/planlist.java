@@ -49,6 +49,7 @@ public class planlist extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     private ArrayList<plan> item = new ArrayList<>();
     private ArrayList<Integer> pos = new ArrayList<>();
+    private ArrayList<route> routes = new ArrayList<>();
     LinearLayout layout;
     Button button, editbtn;
 
@@ -223,6 +224,10 @@ public class planlist extends AppCompatActivity {
                         globallist.getInstance().setAddress(address);
                         String start = jsonObject.getString("start");//여행일정 기간
                         String end = jsonObject.getString("end");
+                        String lat = jsonObject.getString("gps_lat");
+                        String lng = jsonObject.getString("gps_long");
+                        int flag = jsonObject.getInt("flag");
+                        routes.add(new route(Double.parseDouble(lat),Double.parseDouble(lng),flag));
                         globallist.getInstance().setStartdate(start);
                         globallist.getInstance().setEnddate(end);
                         item.add(new plan(tid,name,img,info,date,time));
@@ -230,6 +235,7 @@ public class planlist extends AppCompatActivity {
                             pos.add(i);
                         adapter.notifyItemInserted(0);
                     }
+                    globallist.getInstance().setRoutes(routes);
                     globallist.getInstance().setPosition(pos);
                     globallist.getInstance().setPlans(item);
                 }catch (JSONException e){

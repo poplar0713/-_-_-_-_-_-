@@ -54,11 +54,11 @@ public class rebuild_plan extends AppCompatActivity {
                         String img = jsonObject.getString("img");//여행지 사진
                         String info = jsonObject.getString("info");//여행지 설명
                         String tid = jsonObject.getString("tid");//여행지 tid
-                        String date = jsonObject.getString("date");
-                        String time = jsonObject.getString("time");
+                        String date = jsonObject.getString("date");//해당여행지를 가는 날짜
+                        String time = jsonObject.getString("time");//여행지 순서
                         item.add(new plan(tid,name,img,info,date,time));
                     }
-                    globallist.getInstance().setPlans(item);
+                    globallist.getInstance().setPlans(item);//전역변수에 저장
                     Intent intent = new Intent(rebuild_plan.this, afterplan.class);
                     startActivity(intent);
                     finish();

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -189,6 +190,10 @@ public class login extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {//로그아웃 버튼 기능 구현
                         Intent i = new Intent(login.this, MainActivity.class);//로그인화면으로 이동
+                        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = auto.edit();
+                        editor.clear();
+                        editor.commit();
                         globallist.getInstance().logout();//전역변수에서 아이디 삭제
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(i);

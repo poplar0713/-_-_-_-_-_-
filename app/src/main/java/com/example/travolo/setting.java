@@ -1,8 +1,10 @@
 package com.example.travolo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +35,7 @@ public class setting extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private Context context = this;
     TextView text;
-    Button btn1, btn2;
+    Button btn1, btn2, btn3;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +46,7 @@ public class setting extends AppCompatActivity {
         text.setText(id);
         btn1 = findViewById(R.id.changepwd);
         btn2 = findViewById(R.id.deleteid);
+        btn3 = findViewById(R.id.sns_link);
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +73,13 @@ public class setting extends AppCompatActivity {
             }
         });
 
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(setting.this, sns_link_id.class);
+                startActivity(intent);
+            }
+        });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -118,6 +128,10 @@ public class setting extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent(setting.this, MainActivity.class);
+                        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = auto.edit();
+                        editor.clear();
+                        editor.commit();
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(i);
                     }

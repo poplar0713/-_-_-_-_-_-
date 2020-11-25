@@ -1,9 +1,11 @@
 package com.example.travolo;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -105,6 +107,24 @@ public class period extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String from = textView.getText().toString();
+                final String to = textView2.getText().toString();
+                try{
+                    format = new SimpleDateFormat("yyyy-MM-dd");
+                    Date first = format.parse(from);
+                    Date second = format.parse(to);
+
+                    long caldate = first.getTime() - second.getTime();
+                    long caldateday = caldate/(24*60*60*1000);
+
+                    caldateday = Math.abs(caldateday);//선택한 날짜 사이의 기간을 계산
+                    globallist.getInstance().setDate((int)caldateday+1);//전역변수에 날짜 저장
+                }catch (ParseException e){
+
+                }
+                globallist.getInstance().setAddress(area);
+                globallist.getInstance().setStartdate(from);
+                globallist.getInstance().setEnddate(to);
                 Intent intent = new Intent(period.this, select_place.class);
                 startActivity(intent);
             }
@@ -158,6 +178,10 @@ public class period extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent i = new Intent(period.this, MainActivity.class);
+                        SharedPreferences auto = getSharedPreferences("auto", Activity.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = auto.edit();
+                        editor.clear();
+                        editor.commit();
                         globallist.getInstance().logout();//저장된 아이디 제거
                         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(i);
