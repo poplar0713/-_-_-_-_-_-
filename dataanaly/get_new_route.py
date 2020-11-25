@@ -5,13 +5,31 @@ import time
 import datetime
 
 def get_list(tid_list, user_id, start_date, end_date):
+
+    if len(tid_list) == 0:
+        return []
+
     a = analy.Analysis(user_id)
-    temp_list = a.get_route(tid_list)
+    j_list = list()
     start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
     days = ((end_date - start_date).days) + 1
-
+    temp_list = a.get_route(tid_list)
     numOfoneday = int(len(temp_list) / days) + 1
+
+    if len(tid_list) < 2:
+        j = {}
+        tmp = a.tour_df[a.tour_df['TID'] == tid_list[0]]
+        j["tid"] = int(tmp.iloc[0]['TID'])
+        j["name"] = tmp.iloc[0]['label']
+        j["img"] = tmp.iloc[0]['depiction']
+        j["info"] = tmp.iloc[0]['description']
+        j["date"] = datetime.datetime.strftime((start_date + datetime.timedelta(days=0)), '%Y-%m-%d')
+        j["time"] = int(0)
+        j_list.append(j)
+
+        return j_list
+
     queue_list = list()
     x = 0
     while days + 1 > x:
@@ -19,7 +37,10 @@ def get_list(tid_list, user_id, start_date, end_date):
         queue_list.append(l)
         x = x + 1
     y = 0
+
     put_temp = numOfoneday - 1
+    if put_temp == 0:
+        put_temp = 1
 
     for i in range(len(temp_list)):
         queue_list[y].append(temp_list[i])
@@ -63,19 +84,18 @@ def get_list(tid_list, user_id, start_date, end_date):
             j += 1
 
     v = 0
-    j_list = list()
 
     while v < days:
         m = 0
         while len(queue_list[v]) > m:
             j = {}
             tmp = a.tour_df[a.tour_df['TID'] == queue_list[v][m]]
-            j["tid"] = tmp.iloc[0]['TID']
+            j["tid"] = int(tmp.iloc[0]['TID'])
             j["name"] = tmp.iloc[0]['label']
             j["img"] = tmp.iloc[0]['depiction']
             j["info"] = tmp.iloc[0]['description']
             j["date"] = datetime.datetime.strftime((start_date + datetime.timedelta(days=v)), '%Y-%m-%d')
-            j["time"] = m
+            j["time"] = int(m)
             j_list.append(j)
             m = m + 1
 

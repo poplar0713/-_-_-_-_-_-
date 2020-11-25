@@ -6,9 +6,9 @@ with ssh.Tunnel() as tunnel:
     # read sql data, make dataframe
     with connect.Connect(port=tunnel.local_bind_port) as conn:
 
-        sql = "select label, category from crawling_tour where tid = 952"
-        #sql = "update point set base_address = '충청남도 계룡시' where pid = 143"
-        #sql = "update crawling_tour set grade = 5 where vote_count > 0 and grade <= 0"
+        #sql = "delete from schedule where uid = '1133' and schedule_name = 'To 전라북도 전주시'"
+        sql = "select * from schedule where uid = '1133' and schedule_name = 'To 전라북도 전주시'"
+        #sql = "insert into point (base_address, gps_lat, gps_long) values('제주특별자치도','33.489011','126.498302')"
         #sql = "select * from crawling_tour"
 
         #cur = conn.cursor()
@@ -16,7 +16,8 @@ with ssh.Tunnel() as tunnel:
         #conn.commit()
 
         df = pd.read_sql_query(sql, conn)
-        #df.to_csv('./tour_gps_info.csv', encoding='utf-8-sig', mode= 'w')
+
+        #df.to_csv('./base_point.csv', encoding='utf-8-sig', mode= 'w')
 
         print(df)
         #df = pd.read_sql_query(sql, conn)

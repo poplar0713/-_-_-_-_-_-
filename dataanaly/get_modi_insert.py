@@ -5,6 +5,7 @@ import get_Recom_list
 import time
 import ssh, connect
 
+#여행지 수정시 대체 여행지를 추천해주는 함수
 def make_list(user_id, base_point, group_no, already_ex_list):
     strat = time.time()
     a = analy.Analysis(user_id)
@@ -31,7 +32,8 @@ def make_list(user_id, base_point, group_no, already_ex_list):
     result_df = pd.DataFrame(columns=['TID', 'label', 'description', 'address', 'depiction', 'grade', 'vote_count'])
 
     print(time.time() - strat)
-
+    
+    #이미 리스트에 있는 여행지는 제거
     for r in tmp1_df['TID']:
         if (bad_df['TID'] == r).any():
             continue

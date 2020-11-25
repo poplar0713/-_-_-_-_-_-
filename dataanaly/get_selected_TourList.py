@@ -11,7 +11,7 @@ item_sim_df = pd.read_csv('item_sim.csv')
 item_sim_df = item_sim_df.set_index('TID')
 sample_list = list()
 
-#여행 리스틑 생성하는 함수
+#사용자가 가고 싶은 여행지를 선택 한 후 여행 리스트틑 생성하는 함수
 def getTourList(base_address, user_id, start_date, end_date, selected_list = sample_list):
     start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
     end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')

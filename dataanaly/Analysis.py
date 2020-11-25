@@ -19,7 +19,7 @@ class Analysis:
                     self.analy_df = self.analy_df.drop_duplicates(['TID'])
 
                     #여행지 정보를 로드
-                    sql = "select TID, label, address, category, depiction, grade, vote_count, gps_lat, gps_long from crawling_tour"
+                    sql = "select TID, label, address, category, depiction, description, grade, vote_count, gps_lat, gps_long from crawling_tour"
                     self.tour_df = pd.read_sql_query(sql, conn)
                     # self.tour_df.set_index('TID', inplace=True)
                     # print(type(float(self.tour_df['gps_lat'].iloc[0])))
@@ -71,6 +71,9 @@ class Analysis:
 
     def get_route(self, tour_list):
         #여행지 id 리스트를 받아 최단 경로로 리스트를 정렬하는 메소드
+
+        if len(tour_list) < 2:
+            return tour_list
 
         result = []
         temp = self.tour_df[['TID', 'gps_lat', 'gps_long']]
