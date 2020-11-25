@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+
+	<display-name>Spring JavaConfig Sample</display-name>
+	<!-- ==================== Listener 설정 ==================== -->
+	<context-param>
+		<param-name>contextClass</param-name>
+		<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+		</param-value>
+	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>com.tistory.lte36.travolo2.config.ApplicationConfig
+		</param-value>
+	</context-param>
+	<!-- servletmapping과 마찬가지로 listener는 특정 이벤트가 발생했을 때 ContextLoaderListener가 
+		실행한다. -->
+	<!-- ContextLoaderListener가 실행되면 context-param에 등록한 class가 실행되게 된다. -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<!-- ==================== servlet 설정 ==================== -->
+	<servlet>
+		<servlet-name>mvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<init-param>
+			<param-name>contextClass</param-name>
+			<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext
+			</param-value>
+		</init-param>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>com.tistory.lte36.travolo2.config.WebMvcContextConfiguration
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>mvc</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ==================== Filter 설정 ==================== -->
+	<!-- request가 수행되기 전, response가 보내지기 전에 수행되는 클래스 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter
+		<!-- 각 요청에 대해서 CharaterEncodingFilter를 적용시켜준다. -->
+		</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<!-- 모든 요청에 대해 적용하기 위해서 /*를 해준다. -->
+	</filter-mapping>
+</web-app>
